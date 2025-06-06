@@ -1,0 +1,422 @@
+<%- include('../template/main/head', { titleWeb: 'Acceso' , cssStyle: 'css/output.css' }) %>
+<%- include('../template/main/navbar') %>
+
+<style>
+    /* Fondo con imagen y overlay oscuro */
+    body, html {
+        height: 100%;
+        margin: 0;
+    }
+    .background-image {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background: url('https://images.unsplash.com/photo-1512820790803-83ca734da794?auto=format&fit=crop&w=1200&q=80') no-repeat center center/cover;
+        z-index: -2;
+    }
+    .overlay {
+        position: fixed;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: rgba(15, 23, 42, 0.75);
+        z-index: -1;
+    }
+    /* Animación de entrada */
+    @keyframes slideFadeIn {
+        from { opacity: 0; transform: translateY(40px) scale(0.98);}
+        to { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    .animate-slideFadeIn {
+        animation: slideFadeIn 0.7s cubic-bezier(.4, 1.7, .6, 0.8) both;
+    }
+    /* Botón animado */
+    .btn-animated {
+        background: linear-gradient(90deg, #06b6d4 0%, #818cf8 100%);
+        background-size: 200% 200%;
+        transition: background-position 0.4s, box-shadow 0.3s, transform 0.2s;
+        box-shadow: 0 4px 32px 0 rgba(129, 140, 248, 0.15);
+    }
+    .btn-animated:hover, .btn-animated:focus {
+        background-position: right center;
+        box-shadow: 0 8px 40px 0 rgba(6, 182, 212, 0.25);
+        transform: scale(1.05) translateY(-2px);
+    }
+    /* Efecto focus campos */
+    .input-animated:focus {
+        box-shadow: 0 0 0 3px #818cf8aa;
+        border-color: #818cf8;
+        transition: box-shadow 0.3s, border-color 0.3s;
+    }
+    /* Iconos campos */
+    .input-icon {
+        position: absolute;
+        left: 0.75rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: #06b6d4;
+        font-size: 1.15rem;
+        pointer-events: none;
+    }
+    .pl-icon {
+        padding-left: 2.2rem !important;
+    }
+    /* Animación para el enlace de login */
+    .login-underline {
+        position: relative;
+        transition: color 0.2s;
+    }
+    .login-underline::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0; bottom: -2px;
+        height: 2px;
+        background: linear-gradient(90deg, #06b6d4, #818cf8);
+        border-radius: 2px;
+        transform: scaleX(0);
+        transition: transform 0.3s;
+        transform-origin: left;
+    }
+    .login-underline:hover::after, .login-underline:focus::after {
+        transform: scaleX(1);
+    }
+    /* Stepper */
+    .stepper-bar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 2rem;
+        gap: 1.5rem;
+    }
+    .stepper-step {
+        width: 2.2rem;
+        height: 2.2rem;
+        border-radius: 50%;
+        background: #334155;
+        color: #a5b4fc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.1rem;
+        border: 2px solid #6366f1;
+        transition: background 0.3s, color 0.3s;
+    }
+    .stepper-step.active {
+        background: linear-gradient(90deg, #06b6d4 0%, #818cf8 100%);
+        color: #fff;
+        border-color: #06b6d4;
+        box-shadow: 0 0 0 4px #06b6d455;
+    }
+    .stepper-label {
+        color: #a5b4fc;
+        font-size: 0.95rem;
+        margin-top: 0.3rem;
+        text-align: center;
+    }
+    .stepper-connector {
+        flex: 1;
+        height: 3px;
+        background: linear-gradient(90deg, #818cf8 0%, #06b6d4 100%);
+        opacity: 0.5;
+        border-radius: 2px;
+    }
+    .hidden-step {
+        display: none;
+    }
+</style>
+
+<div class="background-image"></div>
+<div class="overlay"></div>
+
+<div class="min-h-screen flex items-center justify-center px-4 mt-8 mb-8">
+    <div class="w-full max-w-2xl bg-indigo-900 bg-opacity-95 p-8 rounded-3xl shadow-2xl border-2 border-indigo-700 animate-slideFadeIn relative">
+        <!-- Stepper -->
+        <div class="stepper-bar">
+            <div class="flex flex-col items-center">
+                <div id="step1-circle" class="stepper-step active">1</div>
+                <div class="stepper-label">Datos</div>
+            </div>
+            <div class="stepper-connector"></div>
+            <div class="flex flex-col items-center">
+                <div id="step2-circle" class="stepper-step">2</div>
+                <div class="stepper-label">Acceso</div>
+            </div>
+        </div>
+        <h2 class="text-3xl font-extrabold text-center text-indigo-100 mb-6 tracking-tight drop-shadow flex items-center justify-center gap-3">
+            <i class="bi bi-person-plus-fill text-cyan-400 text-2xl"></i>
+            Crear una cuenta
+        </h2>
+        <form action="/auth/register" method="POST" class="space-y-4 text-base" id="registerStepperForm" autocomplete="off">
+            <!-- Paso 1 -->
+            <div id="step1">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label for="first_name" class="block text-indigo-200 font-semibold mb-1">Primer Nombre</label>
+                        <input type="text" id="first_name" name="first_name" required
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                    <div>
+                        <label for="middle_name" class="block text-indigo-200 font-semibold mb-1">Segundo Nombre (opcional)</label>
+                        <input type="text" id="middle_name" name="middle_name"
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                    <div>
+                        <label for="last_name" class="block text-indigo-200 font-semibold mb-1">Primer Apellido</label>
+                        <input type="text" id="last_name" name="last_name" required
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                    <div>
+                        <label for="second_last_name" class="block text-indigo-200 font-semibold mb-1">Segundo Apellido (opcional)</label>
+                        <input type="text" id="second_last_name" name="second_last_name"
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                    <div>
+                        <label for="document_type" class="block text-indigo-200 font-semibold mb-1">Tipo de Documento</label>
+                        <select id="document_type" name="document_type" required
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated">
+                            <option value="" disabled selected>Selecciona...</option>
+                            <option value="CC">CC</option>
+                            <option value="TI">TI</option>
+                            <option value="CE">CE</option>
+                            <option value="NIT">NIT</option>
+                            <option value="PAS">PAS</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label for="document_number" class="block text-indigo-200 font-semibold mb-1">Número de Documento</label>
+                        <input type="text" id="document_number" name="document_number" required
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                    <div>
+                        <label for="phone" class="block text-indigo-200 font-semibold mb-1">Número de Teléfono (opcional)</label>
+                        <input type="tel" id="phone" name="phone"
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                    <div>
+                        <label for="birth_date" class="block text-indigo-200 font-semibold mb-1">Fecha de Nacimiento</label>
+                        <input type="date" id="birth_date" name="birth_date" required
+                            class="w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-6 gap-4">
+                    <p class="text-center text-sm text-indigo-200 md:text-left">
+                        ¿Ya tienes una cuenta?
+                        <a href="/auth/login"
+                            class="login-underline text-cyan-400 hover:text-cyan-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded transition font-semibold">
+                            Inicia sesión
+                        </a>
+                    </p>
+                    <button type="button" id="nextStep"
+                        class="btn-animated text-white font-bold py-2 px-8 rounded-xl shadow-lg transition-all duration-300 text-base tracking-wide focus:outline-none focus:ring-4 focus:ring-cyan-300 flex items-center gap-2 md:ml-auto">
+                        Siguiente
+                        <i class="bi bi-arrow-right-circle text-white text-lg"></i>
+                    </button>
+                </div>
+            </div>
+            <!-- Paso 2 -->
+            <div id="step2" class="hidden-step">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Usuario y Correo en la misma fila -->
+                    <div>
+                        <label for="username" class="block text-indigo-200 font-semibold mb-1">Nombre de Usuario (opcional)</label>
+                        <div class="relative">
+                            <span class="input-icon">
+                                <i class="bi bi-person-fill"></i>
+                            </span>
+                            <input type="text" id="username" name="username"
+                                class="pl-icon w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                        </div>
+                    </div>
+                    <div>
+                        <label for="email" class="block text-indigo-200 font-semibold mb-1">Correo Electrónico</label>
+                        <div class="relative">
+                            <span class="input-icon">
+                                <i class="bi bi-envelope-fill"></i>
+                            </span>
+                            <input type="email" id="email" name="email" required
+                                class="pl-icon w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                        </div>
+                    </div>
+                    <!-- Contraseña y Confirmar contraseña en la fila siguiente -->
+                    <div>
+                        <label for="password" class="block text-indigo-200 font-semibold mb-1">Contraseña</label>
+                        <div class="relative">
+                            <span class="input-icon">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input type="password" id="password" name="password" required
+                                class="pl-icon pr-10 w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                            <button type="button" id="togglePassword" aria-label="Mostrar u ocultar contraseña"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center bg-transparent border-0 p-0 m-0 focus:outline-none">
+                                <i class="bi bi-eye-slash h-5 w-5 text-indigo-400 hover:text-indigo-200 transition"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div>
+                        <label for="confirm_password" class="block text-indigo-200 font-semibold mb-1">Confirmar Contraseña</label>
+                        <div class="relative">
+                            <span class="input-icon">
+                                <i class="bi bi-lock-fill"></i>
+                            </span>
+                            <input type="password" id="confirm_password" name="confirm_password" required
+                                class="pl-icon pr-10 w-full px-4 py-2 rounded-lg border border-indigo-700 bg-indigo-800 text-white shadow-inner focus:outline-none focus:ring-2 focus:ring-indigo-400 focus:border-indigo-400 transition input-animated" />
+                            <button type="button" id="toggleConfirmPassword" aria-label="Mostrar u ocultar confirmar contraseña"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 flex items-center bg-transparent border-0 p-0 m-0 focus:outline-none">
+                                <i class="bi bi-eye-slash h-5 w-5 text-indigo-400 hover:text-indigo-200 transition"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex flex-col md:flex-row md:justify-between md:items-center mt-6 gap-4">
+                    <p class="text-center text-sm text-indigo-200 md:text-left">
+                        ¿Ya tienes una cuenta?
+                        <a href="/auth/login"
+                            class="login-underline text-cyan-400 hover:text-cyan-200 focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded transition font-semibold">
+                            Inicia sesión
+                        </a>
+                    </p>
+                    <div class="flex gap-2 md:ml-auto">
+                        <button type="button" id="prevStep"
+                            class="btn-animated text-white font-bold py-2 px-8 rounded-xl shadow-lg transition-all duration-300 text-base tracking-wide focus:outline-none focus:ring-4 focus:ring-cyan-300 flex items-center gap-2">
+                            <i class="bi bi-arrow-left-circle text-white text-lg"></i>
+                            Anterior
+                        </button>
+                        <button type="submit"
+                            class="btn-animated text-white font-bold py-2 px-8 rounded-xl shadow-lg transition-all duration-300 text-base tracking-wide focus:outline-none focus:ring-4 focus:ring-cyan-300 flex items-center gap-2">
+                            <i class="bi bi-check-circle-fill text-white text-lg"></i>
+                            Registrarse
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Stepper JS
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const nextBtn = document.getElementById('nextStep');
+    const prevBtn = document.getElementById('prevStep');
+    const step1Circle = document.getElementById('step1-circle');
+    const step2Circle = document.getElementById('step2-circle');
+
+    nextBtn.addEventListener('click', () => {
+        // Validación de campos obligatorios del paso 1
+        const requiredFields = [
+            'first_name',
+            'last_name',
+            'document_type',
+            'document_number',
+            'birth_date'
+        ];
+        let valid = true;
+        requiredFields.forEach(id => {
+            const el = document.getElementById(id);
+            if (!el.value.trim()) {
+                el.classList.add('ring-2', 'ring-red-500');
+                valid = false;
+            } else {
+                el.classList.remove('ring-2', 'ring-red-500');
+            }
+        });
+        if (!valid) {
+            alert('Por favor completa todos los campos obligatorios antes de continuar.');
+            return;
+        }
+        step1.classList.add('hidden-step');
+        step2.classList.remove('hidden-step');
+        step1Circle.classList.remove('active');
+        step2Circle.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    prevBtn.addEventListener('click', () => {
+        step2.classList.add('hidden-step');
+        step1.classList.remove('hidden-step');
+        step2Circle.classList.remove('active');
+        step1Circle.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+
+    // Validación de campos obligatorios del paso 2 antes de enviar el formulario
+    const registerForm = document.getElementById('registerStepperForm');
+    registerForm.addEventListener('submit', function (e) {
+        // Solo validar si el paso 2 está visible
+        if (!step2.classList.contains('hidden-step')) {
+            const requiredStep2 = [
+                'email',
+                'password',
+                'confirm_password'
+            ];
+            let valid = true;
+            requiredStep2.forEach(id => {
+                const el = document.getElementById(id);
+                if (!el.value.trim()) {
+                    el.classList.add('ring-2', 'ring-red-500');
+                    valid = false;
+                } else {
+                    el.classList.remove('ring-2', 'ring-red-500');
+                }
+            });
+
+            // Validar que las contraseñas coincidan
+            const pass = document.getElementById('password');
+            const conf = document.getElementById('confirm_password');
+            if (pass.value !== conf.value) {
+                conf.classList.add('ring-2', 'ring-red-500');
+                valid = false;
+                alert('Las contraseñas no coinciden.');
+            }
+
+            // Validar seguridad de la contraseña: mínimo 8 caracteres y al menos 1 número
+            const passwordValue = pass.value;
+            const passwordRegex = /^(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(passwordValue)) {
+                pass.classList.add('ring-2', 'ring-red-500');
+                valid = false;
+                alert('La contraseña debe tener al menos 8 caracteres y al menos 1 número.');
+            } else {
+                pass.classList.remove('ring-2', 'ring-red-500');
+            }
+
+            if (!valid) {
+                e.preventDefault();
+                alert('Por favor completa todos los campos obligatorios antes de registrarte.');
+            }
+        }
+    });
+
+    // Mostrar/ocultar contraseña y confirmar contraseña
+    const passwordInput = document.getElementById('password');
+    const confirmPasswordInput = document.getElementById('confirm_password');
+    const togglePasswordBtn = document.getElementById('togglePassword');
+    const toggleConfirmPasswordBtn = document.getElementById('toggleConfirmPassword');
+    const passwordIcon = togglePasswordBtn.querySelector('i');
+    const confirmPasswordIcon = toggleConfirmPasswordBtn.querySelector('i');
+
+    togglePasswordBtn.addEventListener('click', () => {
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            passwordIcon.classList.remove('bi-eye-slash');
+            passwordIcon.classList.add('bi-eye');
+        } else {
+            passwordInput.type = 'password';
+            passwordIcon.classList.remove('bi-eye');
+            passwordIcon.classList.add('bi-eye-slash');
+        }
+    });
+
+    toggleConfirmPasswordBtn.addEventListener('click', () => {
+        if (confirmPasswordInput.type === 'password') {
+            confirmPasswordInput.type = 'text';
+            confirmPasswordIcon.classList.remove('bi-eye-slash');
+            confirmPasswordIcon.classList.add('bi-eye');
+        } else {
+            confirmPasswordInput.type = 'password';
+            confirmPasswordIcon.classList.remove('bi-eye');
+            confirmPasswordIcon.classList.add('bi-eye-slash');
+        }
+    });
+</script>
+
+<%- include('../template/main/footer') %>
