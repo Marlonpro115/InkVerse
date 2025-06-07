@@ -9,21 +9,6 @@ const session = require('express-session');
 const mysql = require('mysql');
 const connection = require('./lib/db');
 
-// Main routes
-const indexRouter = require('./routes/index');
-
-// Dashboard routes
-const booksRouter = require('./routes/dashboard/books');
-const authorsRouter = require('./routes/dashboard/authors');
-const categoriesRouter = require('./routes/dashboard/categories');
-const publishersRouter = require('./routes/dashboard/publishers');
-const dashboardRouter = require('./routes/dashboard/index');
-
-// Authentication routes
-const authRouter = require('./routes/auth/auth');
-const registerRouter = require('./routes/auth/register');
-const forgotPasswordRouter = require('./routes/auth/forgot-password');
-
 const app = express();
 const PORT = 5000;
 
@@ -47,19 +32,40 @@ app.use(session({
 
 app.use(flash());
 
+// Main routes
+const indexRouter = require('./routes/index');
+
+// Dashboard routes
+const booksRouter = require('./routes/dashboard/books');
+const authorsRouter = require('./routes/dashboard/authors');
+const categoriesRouter = require('./routes/dashboard/categories');
+const publishersRouter = require('./routes/dashboard/publishers');
+const dashboardRouter = require('./routes/dashboard/index');
+
+// Authentication routes
+const authRouter = require('./routes/auth/auth');
+const registerRouter = require('./routes/auth/register');
+const forgotPasswordRouter = require('./routes/auth/forgot-password');
+
+// Main routes
+app.use('/', indexRouter);
+
+// Dashboard routes
 app.use('/dashboard', dashboardRouter);
 app.use('/dashboard/books', booksRouter);
 app.use('/dashboard/authors', authorsRouter);
 app.use('/dashboard/categories', categoriesRouter);
 app.use('/dashboard/publishers', publishersRouter);
-app.use('/', indexRouter);
+
+// Authentication routes
 app.use('/auth/login', authRouter);
 app.use('/auth/register', registerRouter);
 app.use('/auth/forgot-password', forgotPasswordRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-  next(createError(404));
+  res.status(404);
+  res.render('404');
 });
 
 // error handler
