@@ -9,12 +9,17 @@ const session = require('express-session');
 const mysql = require('mysql');
 const connection = require('./lib/db');
 
-const booksRouter = require('./routes/books');
-const authorsRouter = require('./routes/authors');
-const categoriesRouter = require('./routes/categories');
-const publishersRouter = require('./routes/publishers');
-const dashboardRouter = require('./routes/dashboard');
+// Main routes
 const indexRouter = require('./routes/index');
+
+// Dashboard routes
+const booksRouter = require('./routes/dashboard/books');
+const authorsRouter = require('./routes/dashboard/authors');
+const categoriesRouter = require('./routes/dashboard/categories');
+const publishersRouter = require('./routes/dashboard/publishers');
+const dashboardRouter = require('./routes/dashboard/index');
+
+// Authentication routes
 const authRouter = require('./routes/auth/auth');
 const registerRouter = require('./routes/auth/register');
 const forgotPasswordRouter = require('./routes/auth/forgot-password');

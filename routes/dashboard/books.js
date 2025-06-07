@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const dbConn = require('../lib/db');
-const upload = require('../middlewares/upload');
+const dbConn = require('../../lib/db');
+const upload = require('../../middlewares/upload');
 const fs = require('fs');
 const path = require('path');
 
