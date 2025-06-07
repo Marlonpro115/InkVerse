@@ -28,7 +28,7 @@ app.use(session({
   saveUninitialized: true,
   resave: 'true',
   secret: 'secret'
-}))
+}));
 
 app.use(flash());
 
