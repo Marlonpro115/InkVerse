@@ -34,6 +34,7 @@ app.use(flash());
 
 // Main routes
 const indexRouter = require('./routes/index');
+const booksMainRouter = require('./routes/main/books_main');
 
 // Dashboard routes
 const booksRouter = require('./routes/dashboard/books');
@@ -49,6 +50,7 @@ const forgotPasswordRouter = require('./routes/auth/forgot-password');
 
 // Main routes
 app.use('/', indexRouter);
+app.use('/books', booksMainRouter);
 
 // Dashboard routes
 app.use('/dashboard', dashboardRouter);

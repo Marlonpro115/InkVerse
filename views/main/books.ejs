@@ -1,0 +1,59 @@
+<%- include('../template/main/head', { titleWeb: titleWeb || 'Catálogo de Libros', cssStyle: 'css/main/books_main.css' }) %>
+<%- include('../template/main/navbar') %>
+
+<div class="container mx-auto py-8 mt-24 main-books-bg text-gray-100">
+  <h1 class="text-4xl font-extrabold text-center mb-12 book-title tracking-wide drop-shadow">Catálogo de Libros</h1>
+
+  <% if (Object.keys(booksByCategory).length === 0) { %>
+    <p class="text-center text-indigo-200">No hay libros disponibles.</p>
+  <% } else { %>
+    <% Object.keys(booksByCategory).forEach(function(category) { %>
+      <section class="mb-14">
+        <h2 class="text-2xl font-bold mb-6 category-title text-center tracking-wide drop-shadow"><%= category %></h2>
+        
+        <div class="carousel-container">
+          <div class="flex items-stretch gap-2 transition-transform duration-300" id="carousel-<%= category.replace(/\s/g, '-') %>">
+            <% booksByCategory[category].forEach(function(book, idx) { %>
+              <div class="book-card flex-shrink-0" style="min-width: 340px; max-width: 340px;">
+                <img src="<%= book.coverUrl %>"
+                  alt="Portada"
+                  class="book-img"
+                  loading="lazy"
+                  onerror="this.onerror=null;this.src='<%= book.fallbackCover %>';">
+                <div class="book-card-body">
+                  <h3 class="book-title"><%= book.book_name %></h3>
+                  <p class="book-meta"><span class="font-semibold text-cyan-300">Autor(es):</span> 
+                    <% if (book.authorsArr.length > 0) { %>
+                      <%= book.authorsArr.join(', ') %>
+                    <% } else { %>
+                      Desconocido
+                    <% } %>
+                  </p>
+                  <p class="book-meta"><span class="font-semibold text-cyan-300">Categoría(s):</span> 
+                    <% if (book.categoriesArr.length > 0) { %>
+                      <%= book.categoriesArr.join(', ') %>
+                    <% } else { %>
+                      Sin categoría
+                    <% } %>
+                  </p>
+                  <p class="book-meta"><span class="font-semibold text-cyan-300">Editorial:</span> <%= book.publisher_name || 'Desconocida' %></p>
+                  <p class="book-meta"><span class="font-semibold text-cyan-300">Año:</span> <%= book.year_published || '-' %></p>
+                  <p class="book-meta"><span class="font-semibold text-cyan-300">Disponibles:</span> <%= book.total_quantity %></p>
+                  <div class="btn-row">
+                    <button class="book-btn" <%= book.total_quantity > 0 ? '' : 'disabled' %>>Prestar</button>
+                    <button class="book-btn">Comprar</button>
+                  </div>
+                </div>
+              </div>
+            <% }) %>
+          </div>
+          <button class="absolute left-0 top-1/2 -translate-y-1/2 bg-cyan-600 text-white rounded-full px-2 py-1 shadow hover:bg-cyan-400 z-10" onclick="moveCarousel('<%= category.replace(/\s/g, '-') %>', -1)">&#8592;</button>
+          <button class="absolute right-0 top-1/2 -translate-y-1/2 bg-cyan-600 text-white rounded-full px-2 py-1 shadow hover:bg-cyan-400 z-10" onclick="moveCarousel('<%= category.replace(/\s/g, '-') %>', 1)">&#8594;</button>
+          <a href="/libros/categoria/<%= encodeURIComponent(category) %>" class="absolute right-2 bottom-2 bg-indigo-700 text-white px-3 py-1 rounded shadow hover:bg-indigo-500 text-xs">Ver todos</a>
+        </div>
+      </section>
+    <% }) %>
+  <% } %>
+</div>
+<script src="/js/carousel-books.js"></script>
+<%- include('../template/main/footer') %>

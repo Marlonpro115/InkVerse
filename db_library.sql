@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS books (
   id_book INT AUTO_INCREMENT PRIMARY KEY,
   name VARCHAR(100) NOT NULL,
   isbn CHAR(13) UNIQUE,
-  year_published YEAR,
+  year_published SMALLINT, -- Cambiado de YEAR a SMALLINT para permitir años históricos
   num_pages INT,
   cover_image VARCHAR(255),
   description TEXT,
@@ -114,46 +114,127 @@ CREATE TABLE IF NOT EXISTS book_sales (
   FOREIGN KEY (id_user) REFERENCES users(id_user) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Índice adicional para ISBN (ya es UNIQUE, opcional)
--- CREATE INDEX idx_books_isbn ON books(isbn);
-
--- Insertar datos en la tabla de autores
-INSERT INTO authors (name, state) VALUES 
+-- Datos de ejemplo para autores
+INSERT INTO authors (name, state) VALUES
 ('Gabriel García Márquez', 1),
 ('Isabel Allende', 1),
 ('Mario Vargas Llosa', 1),
 ('Julio Cortázar', 1),
 ('Laura Esquivel', 1),
 ('Carlos Fuentes', 1),
-('Jorge Luis Borges', 1);
+('Jorge Luis Borges', 1),
+('J. K. Rowling', 1),
+('George Orwell', 1),
+('Miguel de Cervantes', 1),
+('Jane Austen', 1),
+('Antoine de Saint-Exupéry', 1),
+('J. R. R. Tolkien', 1),
+('Haruki Murakami', 1),
+('Carlos Ruiz Zafón', 1),
+('Ray Bradbury', 1);
 
--- Insertar datos en la tabla de categorías
-INSERT INTO categories (name, state) VALUES 
-('Ficción', 1),
-('Realismo Mágico', 1),
-('Novela Histórica', 1),
-('Ensayo', 1),
-('Poesía', 1),
-('Literatura Fantástica', 1),
-('Ciencia Ficción', 1);
+-- Datos de ejemplo para categorías
+INSERT INTO categories (name, description, state) VALUES
+('Ficción', 'Narrativa de hechos imaginarios.', 1),
+('Realismo Mágico', 'Género literario que mezcla lo real y lo fantástico.', 1),
+('Novela Histórica', 'Novelas ambientadas en contextos históricos.', 1),
+('Ensayo', 'Obras de reflexión y análisis.', 1),
+('Poesía', 'Obras en verso.', 1),
+('Literatura Fantástica', 'Narraciones de mundos imaginarios.', 1),
+('Ciencia Ficción', 'Narrativa basada en avances científicos.', 1),
+('Clásicos', 'Obras literarias de gran relevancia histórica.', 1),
+('Aventura', 'Narraciones de viajes y hazañas.', 1),
+('Infantil', 'Libros para niños y jóvenes.', 1);
 
--- Insertar datos en la tabla de editoriales
-INSERT INTO publishers (name, state) VALUES 
+-- Datos de ejemplo para editoriales
+INSERT INTO publishers (name, state) VALUES
 ('Editorial Sudamericana', 1),
 ('Alfaguara', 1),
 ('Planeta', 1),
 ('Seix Barral', 1),
 ('Fondo de Cultura Económica', 1),
 ('Anagrama', 1),
-('Minotauro', 1);
+('Minotauro', 1),
+('Salamandra', 1),
+('Debolsillo', 1),
+('Penguin Books', 1),
+('Tusquets', 1);
 
--- Insertar usuario de prueba (¡reemplazar el password por hash real en producción!)
-INSERT INTO users (
-  first_name, middle_name, last_name, second_last_name,
-  username, document_type, document_number,
-  birth_date, email, password, role, created_at
-) VALUES (
-  'Marlon', 'Agusto', 'Perez', 'Hernandez',
-  'Marlonpro115', 'CC', '1104257462',
-  '2004-12-16', 'marlonperezhe@gmail.com', '23124477', 'admin', CURRENT_TIMESTAMP
-);
+-- Datos de ejemplo para usuarios
+INSERT INTO users (first_name, middle_name, last_name, second_last_name, username, document_type, document_number, birth_date, email, password, role, created_at)
+VALUES
+('Marlon', 'Agusto', 'Perez', 'Hernandez', 'Marlonpro115', 'CC', '1104257462', '2004-12-16', 'marlonperezhe@gmail.com', '23124477', 'admin', CURRENT_TIMESTAMP),
+('Ana', NULL, 'García', 'López', 'anagarcia', 'CC', '1104257463', '1990-05-10', 'ana.garcia@email.com', 'password123', 'user', CURRENT_TIMESTAMP),
+('Luis', 'Fernando', 'Martínez', NULL, 'luisfm', 'TI', '1104257464', '1985-08-22', 'luis.martinez@email.com', 'password456', 'user', CURRENT_TIMESTAMP);
+
+-- Datos de ejemplo para libros
+INSERT INTO books (name, isbn, year_published, num_pages, description, total_quantity, id_publisher, cover_image, state)
+VALUES
+('Cien Años de Soledad', '9780307474728', 1967, 417, 'Obra maestra del realismo mágico.', 5, 1, NULL, 1),
+('La Casa de los Espíritus', '9780553383805', 1982, 433, 'Novela emblemática de Isabel Allende.', 3, 2, NULL, 1),
+('Rayuela', '9788437602215', 1963, 736, 'Novela experimental de Julio Cortázar.', 4, 4, NULL, 1),
+('El Aleph', '9788426404187', 1949, 174, 'Colección de cuentos de Borges.', 2, 6, NULL, 1),
+('Como Agua para Chocolate', '9780385420174', 1989, 256, 'Novela de realismo mágico y gastronomía.', 6, 5, NULL, 1),
+('Harry Potter y la piedra filosofal', '9788478884452', 1997, 256, 'Primer libro de la saga de Harry Potter.', 8, 8, NULL, 1),
+('1984', '9780451524935', 1949, 328, 'Distopía clásica sobre un régimen totalitario.', 7, 9, NULL, 1),
+('Don Quijote de la Mancha', '9788491050297', 1605, 863, 'Obra cumbre de la literatura española.', 5, 10, NULL, 1),
+('Orgullo y Prejuicio', '9788491050298', 1813, 416, 'Novela romántica de Jane Austen.', 6, 11, NULL, 1),
+('El Principito', '9780156013987', 1943, 96, 'Fábula poética sobre la vida y la amistad.', 10, 12, NULL, 1),
+('El Hobbit', '9788445071413', 1937, 320, 'Aventura fantástica en la Tierra Media.', 7, 13, NULL, 1),
+('Kafka en la orilla', '9788483835586', 2002, 656, 'Novela surrealista de Haruki Murakami.', 4, 14, NULL, 1),
+('Crónica de una muerte anunciada', '9780307387738', 1981, 120, 'Novela corta de Gabriel García Márquez.', 5, 1, NULL, 1),
+('La Sombra del Viento', '9788408172177', 2001, 576, 'Misterio literario en la Barcelona de posguerra.', 6, 2, NULL, 1),
+('Fahrenheit 451', '9788497594257', 1953, 256, 'Distopía sobre la censura y los libros prohibidos.', 5, 9, NULL, 1);
+
+-- Relación libros-autores
+INSERT INTO book_authors (id_book, id_author) VALUES
+(1, 1), -- Cien Años de Soledad - Gabriel García Márquez
+(2, 2), -- La Casa de los Espíritus - Isabel Allende
+(3, 4), -- Rayuela - Julio Cortázar
+(4, 7), -- El Aleph - Jorge Luis Borges
+(5, 5), -- Como Agua para Chocolate - Laura Esquivel
+(6, 8),  -- Harry Potter - J. K. Rowling
+(7, 9),  -- 1984 - George Orwell
+(8, 10), -- Don Quijote - Miguel de Cervantes
+(9, 11), -- Orgullo y Prejuicio - Jane Austen
+(10, 12),-- El Principito - Antoine de Saint-Exupéry
+(11, 13),-- El Hobbit - J. R. R. Tolkien
+(12, 14),-- Kafka en la orilla - Haruki Murakami
+(13, 1), -- Crónica de una muerte anunciada - Gabriel García Márquez
+(14, 15),-- La Sombra del Viento - Carlos Ruiz Zafón
+(15, 16);-- Fahrenheit 451 - Ray Bradbury
+
+-- Relación libros-categorías
+INSERT INTO book_categories (id_book, id_category) VALUES
+(1, 2), -- Realismo Mágico
+(2, 2), -- Realismo Mágico
+(3, 1), -- Ficción
+(4, 6), -- Literatura Fantástica
+(5, 2), -- Realismo Mágico
+(6, 3),  -- Harry Potter - Novela Histórica (puedes cambiar por Fantástica si lo prefieres)
+(6, 6),  -- Harry Potter - Literatura Fantástica
+(7, 1),  -- 1984 - Ficción
+(7, 7),  -- 1984 - Ciencia Ficción
+(8, 1),  -- Don Quijote - Ficción
+(8, 8),  -- Don Quijote - Clásicos
+(9, 1),  -- Orgullo y Prejuicio - Ficción
+(9, 8),  -- Orgullo y Prejuicio - Clásicos
+(10, 9), -- El Principito - Infantil
+(10, 6), -- El Principito - Literatura Fantástica
+(11, 6), -- El Hobbit - Literatura Fantástica
+(11, 2), -- El Hobbit - Realismo Mágico
+(12, 1), -- Kafka en la orilla - Ficción
+(13, 1), -- Crónica de una muerte anunciada - Ficción
+(14, 1), -- La Sombra del Viento - Ficción
+(15, 7); -- Fahrenheit 451 - Ciencia Ficción
+
+-- Préstamos y ventas adicionales
+INSERT INTO book_loans (id_book, id_user, loan_date, due_date, returned) VALUES
+(6, 2, '2024-06-07 09:00:00', '2024-06-21 09:00:00', 0),
+(7, 3, '2024-06-08 11:00:00', '2024-06-22 11:00:00', 0),
+(8, 1, '2024-06-09 15:00:00', '2024-06-23 15:00:00', 1);
+
+INSERT INTO book_sales (id_book, id_user, sale_date, quantity, price, discount) VALUES
+(6, 1, '2024-06-10 13:00:00', 1, 35000, 0),
+(7, 2, '2024-06-11 14:00:00', 1, 32000, 5),
+(8, 3, '2024-06-12 16:00:00', 2, 40000, 0);

@@ -1,0 +1,163 @@
+ body {
+     background: #0f172a !important;
+     /* bg-indigo-950 */
+     box-shadow: none !important;
+     border: none !important;
+ }
+
+ .main-books-bg {
+     background: transparent !important;
+     box-shadow: none !important;
+     border: none !important;
+ }
+
+ .book-card {
+     display: flex;
+     flex-direction: row;
+     align-items: stretch;
+     background: #1e293b;
+     border: 1.5px solid #38bdf8;
+     box-shadow: 0 2px 8px 0 rgba(56, 189, 248, 0.10);
+     border-radius: 1rem;
+     margin: 0.2rem auto;
+     /* Menor separación entre cards */
+     max-width: 480px;
+     min-width: 0;
+     width: 100%;
+     overflow: hidden;
+     transition: transform 0.18s, box-shadow 0.18s, border-color 0.18s;
+ }
+
+ .book-card:hover {
+     transform: scale(1.02);
+     box-shadow: 0 6px 18px 0 rgba(56, 189, 248, 0.18);
+     border-color: #818cf8;
+     background: #232946;
+ }
+
+ .book-card .book-img {
+     width: 150px;
+     height: 220px;
+     object-fit: cover;
+     border-radius: 0.7rem 0 0 0.7rem;
+     box-shadow: 0 2px 8px 0 rgba(56, 189, 248, 0.13);
+     border: none;
+     background: #fff;
+     margin: 0;
+     display: block;
+     align-self: stretch;
+ }
+
+ .book-card-body {
+     flex: 1;
+     padding: 1rem 1.1rem 1rem 1.1rem;
+     display: flex;
+     flex-direction: column;
+     justify-content: space-between;
+ }
+
+ .book-title {
+     font-size: 1.1rem;
+     font-weight: 700;
+     margin-bottom: 0.2rem;
+     text-align: left;
+     background: linear-gradient(90deg, #38bdf8 30%, #a5b4fc 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     background-clip: text;
+ }
+
+ .book-meta {
+     font-size: 0.82rem;
+     color: #c7d2fe;
+     margin-bottom: 0.13rem;
+     text-align: left;
+ }
+
+ .book-btn {
+     font-size: 0.85rem;
+     padding: 0.25rem 0.8rem;
+     border-radius: 0.5rem;
+     background: linear-gradient(90deg, #06b6d4 0%, #818cf8 100%);
+     color: #fff;
+     font-weight: 700;
+     margin-left: 0.2rem;
+     margin-right: 0.2rem;
+     box-shadow: 0 1px 4px 0 rgba(56, 189, 248, 0.10);
+     transition: transform 0.18s, box-shadow 0.18s, background 0.18s;
+ }
+
+ .book-btn:hover {
+     background: linear-gradient(90deg, #818cf8 0%, #06b6d4 100%);
+     transform: scale(1.06);
+     box-shadow: 0 2px 8px 0 rgba(129, 140, 248, 0.18);
+ }
+
+ .book-btn:disabled {
+     opacity: 0.5;
+     cursor: not-allowed;
+     background: #64748b;
+ }
+
+ .book-card .btn-row {
+     display: flex;
+     justify-content: flex-end;
+     margin-top: 0.5rem;
+     gap: 0.3rem;
+ }
+
+ .category-title {
+     font-size: 1.1rem;
+     margin-bottom: 0.7rem;
+     background: linear-gradient(90deg, #818cf8 30%, #38bdf8 100%);
+     -webkit-background-clip: text;
+     -webkit-text-fill-color: transparent;
+     background-clip: text;
+ }
+
+ .carousel-container {
+     position: relative;
+     overflow: hidden;
+ }
+
+ .carousel {
+     display: flex;
+     transition: transform 0.3s ease;
+ }
+
+ .carousel-button {
+     position: absolute;
+     top: 50%;
+     transform: translateY(-50%);
+     background-color: rgba(0, 0, 0, 0.5);
+     color: white;
+     border: none;
+     padding: 0.5rem;
+     cursor: pointer;
+     z-index: 10;
+ }
+
+ .carousel-button.left {
+     left: 0.5rem;
+ }
+
+ .carousel-button.right {
+     right: 0.5rem;
+ }
+
+ .view-all-button {
+     position: absolute;
+     right: 1rem;
+     bottom: 1rem;
+     background-color: #4f46e5;
+     color: white;
+     padding: 0.5rem 1rem;
+     border-radius: 0.375rem;
+     text-decoration: none;
+     font-weight: 600;
+     transition: background-color 0.3s;
+ }
+
+ .view-all-button:hover {
+     background-color: #4338ca;
+ }
