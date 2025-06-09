@@ -1,0 +1,78 @@
+<%- include('../template/main/head', { titleWeb: titleWeb, cssStyle: 'css/main/books_main.css' }) %>
+<%- include('../template/main/navbar') %>
+
+<div class="container mx-auto py-8 mt-24 main-books-bg text-gray-100">
+  <div class="flex flex-col items-center mb-10">
+    <img src="/img/libro-abierto512.png" alt="Libros" class="w-16 h-16 mb-2 drop-shadow-lg">
+    <h1 class="text-3xl md:text-4xl font-extrabold text-center mb-2 book-title tracking-wide drop-shadow">Libros de la categoría: <span class="text-cyan-400"><%= category %></span></h1>
+    <button id="back-to-catalog" type="button" class="mt-2 px-5 py-2 rounded-lg font-bold text-base bg-gradient-to-r from-cyan-500 to-blue-500 text-white shadow hover:from-blue-500 hover:to-cyan-400 hover:shadow-lg border-2 border-cyan-400 transition-all duration-200 flex items-center gap-2">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+      Volver al catálogo
+    </button>
+  </div>
+  <% if (books.length === 0) { %>
+    <p class="text-center text-indigo-200">No hay libros en esta categoría.</p>
+  <% } else { %>
+    <% for (let i = 0; i < books.length; i += 3) { %>
+      <div class="flex flex-wrap justify-center gap-8 mb-8">
+        <% books.slice(i, i+3).forEach(function(book) { %>
+          <div class="book-card flex-shrink-0 relative">
+            <img src="<%= book.coverUrl %>"
+              alt="Portada"
+              class="book-img"
+              loading="lazy"
+              onerror="this.onerror=null;this.src='<%= book.fallbackCover %>';">
+            <div class="book-card-body">
+              <h3 class="book-title">
+                <%= book.book_name %>
+              </h3>
+              <p class="book-meta"><span class="font-semibold text-cyan-600">Autor:</span> <%= book.authorsArr[0] || 'Desconocido' %></p>
+              <p class="book-meta"><span class="font-semibold text-cyan-600">Disponibles:</span> <%= book.total_quantity %></p>
+            </div>
+            <div class="p-4 pt-0">
+              <button class="book-btn ver-mas w-full" data-book='<%- JSON.stringify(book) %>' onclick="showBookModal(this)">Ver más</button>
+            </div>
+            <% if (book.total_quantity > 0) { %>
+              <span class="absolute top-2 left-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full shadow">Disponible</span>
+            <% } else { %>
+              <span class="absolute top-2 left-2 bg-red-500 text-white text-xs px-2 py-1 rounded-full shadow">Agotado</span>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+  <% } %>
+</div>
+<!-- Modal para información completa del libro -->
+<div id="book-modal" class="book-modal-overlay" style="display:none;">
+  <div class="book-modal-card">
+    <div class="book-modal-content">
+      <button class="book-modal-close" onclick="closeBookModal()">&times;</button>
+      <div id="book-modal-body"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Guardar la posición de scroll antes de salir
+window.addEventListener('beforeunload', function() {
+  sessionStorage.setItem('scrollPos', window.scrollY);
+});
+// Restaurar la posición de scroll al cargar
+window.addEventListener('DOMContentLoaded', function() {
+  const scrollPos = sessionStorage.getItem('scrollPos');
+  if (scrollPos) window.scrollTo(0, parseInt(scrollPos));
+});
+// Botón volver atrás
+const backBtn = document.getElementById('back-to-catalog');
+if (backBtn) {
+  backBtn.addEventListener('click', function(e) {
+    e.preventDefault();
+    window.history.back();
+  });
+}
+</script>
+
+<script src="/js/book-modal.js"></script>
+
+<%- include('../template/main/footer') %>

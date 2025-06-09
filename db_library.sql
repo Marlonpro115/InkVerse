@@ -186,6 +186,25 @@ VALUES
 ('La Sombra del Viento', '9788408172177', 2001, 576, 'Misterio literario en la Barcelona de posguerra.', 6, 2, NULL, 1),
 ('Fahrenheit 451', '9788497594257', 1953, 256, 'Distopía sobre la censura y los libros prohibidos.', 5, 9, NULL, 1);
 
+-- Libros adicionales para pruebas de carrusel
+INSERT INTO books (name, isbn, year_published, num_pages, description, total_quantity, id_publisher, cover_image, state)
+VALUES
+('El amor en los tiempos del cólera', '9780307389732', 1985, 348, 'Novela de Gabriel García Márquez sobre el amor y el tiempo.', 4, 1, NULL, 1),
+('La ciudad y los perros', '9788437602178', 1963, 480, 'Primera novela de Mario Vargas Llosa.', 3, 3, NULL, 1),
+('Pedro Páramo', '9789684110083', 1955, 124, 'Novela emblemática de Juan Rulfo.', 5, 5, NULL, 1),
+('El túnel', '9788437602338', 1948, 160, 'Novela psicológica de Ernesto Sabato.', 2, 6, NULL, 1),
+('Aura', '9789681602369', 1962, 62, 'Novela corta de Carlos Fuentes.', 3, 5, NULL, 1),
+('Crónica del pájaro que da cuerda al mundo', '9788498381498', 1994, 928, 'Novela surrealista de Haruki Murakami.', 4, 14, NULL, 1),
+('Los juegos del hambre', '9788498675399', 2008, 400, 'Distopía juvenil de Suzanne Collins.', 7, 9, NULL, 1),
+('El retrato de Dorian Gray', '9788491050299', 1890, 272, 'Novela gótica de Oscar Wilde.', 6, 11, NULL, 1),
+('Mujercitas', '9788491050300', 1868, 480, 'Clásico de Louisa May Alcott.', 5, 11, NULL, 1),
+('El guardián entre el centeno', '9780316769488', 1951, 277, 'Novela de J. D. Salinger.', 4, 10, NULL, 1),
+('La ladrona de libros', '9786070709930', 2005, 544, 'Novela de Markus Zusak.', 6, 2, NULL, 1),
+('El alquimista', '9780061122415', 1988, 208, 'Novela de Paulo Coelho.', 8, 3, NULL, 1),
+('El nombre del viento', '9788401352836', 2007, 872, 'Fantasía épica de Patrick Rothfuss.', 7, 13, NULL, 1),
+('La tregua', '9788491050317', 1960, 224, 'Novela de Mario Benedetti.', 3, 4, NULL, 1),
+('El perfume', '9788497593793', 1985, 288, 'Novela de Patrick Süskind.', 5, 9, NULL, 1);
+
 -- Relación libros-autores
 INSERT INTO book_authors (id_book, id_author) VALUES
 (1, 1), -- Cien Años de Soledad - Gabriel García Márquez
@@ -202,7 +221,22 @@ INSERT INTO book_authors (id_book, id_author) VALUES
 (12, 14),-- Kafka en la orilla - Haruki Murakami
 (13, 1), -- Crónica de una muerte anunciada - Gabriel García Márquez
 (14, 15),-- La Sombra del Viento - Carlos Ruiz Zafón
-(15, 16);-- Fahrenheit 451 - Ray Bradbury
+(15, 16),-- Fahrenheit 451 - Ray Bradbury
+(16, 1),  -- El amor en los tiempos del cólera - Gabriel García Márquez
+(17, 3),  -- La ciudad y los perros - Mario Vargas Llosa
+(18, 17), -- Pedro Páramo - Juan Rulfo (agrega autor si no existe)
+(19, 18), -- El túnel - Ernesto Sabato (agrega autor si no existe)
+(20, 6),  -- Aura - Carlos Fuentes
+(21, 14), -- Crónica del pájaro que da cuerda al mundo - Haruki Murakami
+(22, 19), -- Los juegos del hambre - Suzanne Collins (agrega autor si no existe)
+(23, 20), -- El retrato de Dorian Gray - Oscar Wilde (agrega autor si no existe)
+(24, 21), -- Mujercitas - Louisa May Alcott (agrega autor si no existe)
+(25, 22), -- El guardián entre el centeno - J. D. Salinger (agrega autor si no existe)
+(26, 23), -- La ladrona de libros - Markus Zusak (agrega autor si no existe)
+(27, 24), -- El alquimista - Paulo Coelho (agrega autor si no existe)
+(28, 25), -- El nombre del viento - Patrick Rothfuss (agrega autor si no existe)
+(29, 26), -- La tregua - Mario Benedetti (agrega autor si no existe)
+(30, 27); -- El perfume - Patrick Süskind (agrega autor si no existe)
 
 -- Relación libros-categorías
 INSERT INTO book_categories (id_book, id_category) VALUES
@@ -226,7 +260,22 @@ INSERT INTO book_categories (id_book, id_category) VALUES
 (12, 1), -- Kafka en la orilla - Ficción
 (13, 1), -- Crónica de una muerte anunciada - Ficción
 (14, 1), -- La Sombra del Viento - Ficción
-(15, 7); -- Fahrenheit 451 - Ciencia Ficción
+(15, 7), -- Fahrenheit 451 - Ciencia Ficción
+(16, 2),  -- Realismo Mágico
+(17, 3),  -- Novela Histórica
+(18, 1),  -- Ficción
+(19, 1),  -- Ficción
+(20, 2),  -- Realismo Mágico
+(21, 1),  -- Ficción
+(22, 7),  -- Ciencia Ficción
+(23, 8),  -- Clásicos
+(24, 8),  -- Clásicos
+(25, 1),  -- Ficción
+(26, 1),  -- Ficción
+(27, 6),  -- Literatura Fantástica
+(28, 6),  -- Literatura Fantástica
+(29, 1),  -- Ficción
+(30, 1);  -- Ficción
 
 -- Préstamos y ventas adicionales
 INSERT INTO book_loans (id_book, id_user, loan_date, due_date, returned) VALUES
@@ -238,3 +287,17 @@ INSERT INTO book_sales (id_book, id_user, sale_date, quantity, price, discount) 
 (6, 1, '2024-06-10 13:00:00', 1, 35000, 0),
 (7, 2, '2024-06-11 14:00:00', 1, 32000, 5),
 (8, 3, '2024-06-12 16:00:00', 2, 40000, 0);
+
+-- Autores adicionales para los nuevos libros (si no existen)
+INSERT IGNORE INTO authors (id_author, name, state) VALUES
+(17, 'Juan Rulfo', 1),
+(18, 'Ernesto Sabato', 1),
+(19, 'Suzanne Collins', 1),
+(20, 'Oscar Wilde', 1),
+(21, 'Louisa May Alcott', 1),
+(22, 'J. D. Salinger', 1),
+(23, 'Markus Zusak', 1),
+(24, 'Paulo Coelho', 1),
+(25, 'Patrick Rothfuss', 1),
+(26, 'Mario Benedetti', 1),
+(27, 'Patrick Süskind', 1);

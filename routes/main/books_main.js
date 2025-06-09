@@ -66,4 +66,53 @@ router.get('/', (req, res, next) => {
     });
 });
 
+// Página para mostrar todos los libros de una categoría
+router.get('/categoria/:category', (req, res, next) => {
+    const category = decodeURIComponent(req.params.category);
+    const sql = `
+        SELECT 
+            b.id_book,
+            b.name AS book_name,
+            b.isbn,
+            b.cover_image,
+            b.year_published,
+            b.total_quantity,
+            b.state,
+            p.name AS publisher_name,
+            GROUP_CONCAT(DISTINCT a.name SEPARATOR ', ') AS authors,
+            GROUP_CONCAT(DISTINCT c.name SEPARATOR ', ') AS categories
+        FROM books b
+        LEFT JOIN book_authors ba ON b.id_book = ba.id_book
+        LEFT JOIN authors a ON ba.id_author = a.id_author
+        LEFT JOIN book_categories bc ON b.id_book = bc.id_book
+        LEFT JOIN categories c ON bc.id_category = c.id_category
+        LEFT JOIN publishers p ON b.id_publisher = p.id_publisher
+        WHERE b.state = 1
+        GROUP BY b.id_book
+        HAVING FIND_IN_SET(?, categories) > 0
+        ORDER BY b.name ASC`;
+
+    dbConn.query(sql, [category], (err, books) => {
+        if (err) return next(err);
+        books.forEach(book => {
+            let cleanIsbn = book.isbn ? String(book.isbn).replace(/[^0-9Xx]/g, '') : null;
+            let isValidIsbn = cleanIsbn && (cleanIsbn.length === 10 || cleanIsbn.length === 13);
+            let fallbackCover = book.cover_image ? ('/uploads/covers/' + book.cover_image) : '/uploads/covers/no_cover_available.png';
+            let coverUrl = isValidIsbn
+                ? `https://covers.openlibrary.org/b/isbn/${cleanIsbn}-L.jpg`
+                : fallbackCover;
+            book.cleanIsbn = cleanIsbn;
+            book.fallbackCover = fallbackCover;
+            book.coverUrl = coverUrl;
+            book.authorsArr = book.authors ? book.authors.split(', ') : [];
+            book.categoriesArr = book.categories ? book.categories.split(', ') : [];
+        });
+        res.render('main/books_category', {
+            titleWeb: `Libros de la categoría: ${category}`,
+            category,
+            books
+        });
+    });
+});
+
 module.exports = router;
