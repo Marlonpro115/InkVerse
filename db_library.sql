@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS users (
   birth_date DATE NOT NULL,
   email VARCHAR(100) NOT NULL UNIQUE,
   password VARCHAR(255) NOT NULL,
-  role ENUM('admin', 'librarian', 'user') DEFAULT 'user',
+  role ENUM('user', 'admin', 'librarian', 'author') DEFAULT 'user',
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   deleted_at TIMESTAMP NULL DEFAULT NULL
