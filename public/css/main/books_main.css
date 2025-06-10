@@ -3,6 +3,7 @@ body {
      /* bg-indigo-950 */
      box-shadow: none !important;
      border: none !important;
+     min-height: 100vh;
  }
 
  .main-books-bg {

@@ -40,7 +40,6 @@ La aplicación estará disponible en [http://localhost:5000](http://localhost:50
 - `/views` - Vistas EJS para las páginas web
 - `/public` - Archivos estáticos (CSS, JS, imágenes)
 - `/routes` - Definición de rutas de la aplicación
-- `/controllers` - Lógica de negocio y controladores
 - `/models` - Modelos de datos (si aplica)
 
 ## Personalización
