@@ -4,15 +4,17 @@ const bcrypt = require('bcrypt');
 const connection = require('../../lib/db');
 
 // Mostrar formulario login
-router.get('/', (req, res) => {
+router.get('/login', (req, res) => {
     res.render('auth/login', { error: null });
 });
 
 // Procesar login
-router.post('/', (req, res) => {
-    const { email, password } = req.body;
+router.post('/login', (req, res) => {
+    const { userIdentifier, password } = req.body;
 
-    connection.query('SELECT * FROM users WHERE email = ?', [email], async (err, results) => {
+    // Buscar por email o username
+    const query = `SELECT u.*, up.profile_picture FROM users u LEFT JOIN user_profiles up ON u.id_user = up.user_id WHERE u.email = ? OR u.username = ?`;
+    connection.query(query, [userIdentifier, userIdentifier], async (err, results) => {
         if (err) {
             return res.render('auth/login', { error: 'Error en el servidor' });
         }
@@ -26,21 +28,23 @@ router.post('/', (req, res) => {
             return res.render('auth/login', { error: 'Contraseña incorrecta' });
         }
 
-        req.session.user = {
-            id: user.id_user,
-            name: user.first_name,
-            role: user.role,
-            email: user.email
-        };
+        // Elimina la contraseña antes de guardar en sesión
+        delete user.password;
+        req.session.user = { ...user };
 
-        res.redirect('dashboard');
+        res.redirect('/'); // Redirigir al inicio en vez de dashboard
     });
 });
 
-// Logout
+// Ruta para cerrar sesión
 router.get('/logout', (req, res) => {
-    req.session.destroy(() => {
-        res.redirect('/login');
+    req.session.destroy((err) => {
+        if (err) {
+            res.clearCookie('connect.sid');
+            return res.redirect('/');
+        }
+        res.clearCookie('connect.sid');
+        res.redirect('/');
     });
 });
 

@@ -1,0 +1,90 @@
+/* Animación brillo para el texto del logo */
+@keyframes shine {
+    0% {
+        background-position: -200%;
+    }
+
+    100% {
+        background-position: 200%;
+    }
+}
+
+@keyframes dropdownFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(-10px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+.dropdown-animate {
+  animation: dropdownFadeIn 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+
+.shine-hover:hover {
+    background: linear-gradient(90deg, #ffffff, #3b82f6, #8b5cf6);
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shine 2s linear infinite;
+}
+
+/* Toggle hamburguesa usando aria-expanded */
+button[aria-expanded="true"] #bar1 {
+    transform: rotate(45deg) translate(5px, 5px);
+    background: #fff;
+}
+
+button[aria-expanded="true"] #bar2 {
+    opacity: 0;
+}
+
+button[aria-expanded="true"] #bar3 {
+    transform: rotate(-45deg) translate(5px, -5px);
+    background: #fff;
+}
+
+/* Mejora el grosor y transición para la X */
+#bar1,
+#bar2,
+#bar3 {
+    height: 3px;
+    transition: transform 0.3s, opacity 0.3s, background 0.3s;
+}
+
+/* Efecto hover brillante para botón Iniciar Sesión */
+@keyframes buttonShine {
+    0% {
+        background-position: -150%;
+    }
+
+    100% {
+        background-position: 150%;
+    }
+}
+
+.login-btn {
+    background: white;
+    color: #ffffff;
+    /* índigo oscuro */
+    font-weight: 600;
+    padding: 0.375rem 1rem;
+    /* py-1.5 px-4 */
+    border-radius: 0.375rem;
+    transition: background-position 0.5s ease, color 0.3s ease, box-shadow 0.3s ease;
+    background-image: linear-gradient(90deg, #3b82f6, #8b5cf6, #3b82f6);
+    background-size: 200% 100%;
+    background-repeat: no-repeat;
+    background-position: left center;
+    /* Para que el fondo blanco no se sobreponga al degradado de la animación */
+    background-clip: padding-box;
+}
+
+.login-btn:hover {
+    animation: buttonShine 2s linear infinite;
+    background-position: 100% 0;
+    color: white;
+    box-shadow: 0 0 8px rgba(139, 92, 246, 0.7);
+}

@@ -1,4 +1,4 @@
-<%- include('../template/main/head', { titleWeb: titleWeb, cssStyle: 'css/main/books_main.css' }) %>
+<%- include('../template/main/head', { titleWeb: titleWeb, cssStyle: ['css/main/books_main.css', 'css/main/navbar.css'] }) %>
     <%- include('../template/main/navbar') %>
 
         <div class="container mx-auto py-8 mt-24 main-books-bg text-gray-100">
@@ -85,6 +85,4 @@
             }
         </script>
 
-        <script src="/js/book-modal.js"></script>
-
-        <%- include('../template/main/footer') %>
+        <%- include('../template/main/footer', { jsStyle: ['js/book-modal.js'] }) %>

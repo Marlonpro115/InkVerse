@@ -1,4 +1,4 @@
-<%- include('../template/main/head', { titleWeb: titleWeb || 'Catálogo de Libros', cssStyle: 'css/main/books_main.css' }) %>
+<%- include('../template/main/head', { titleWeb: titleWeb || 'Catálogo de Libros', cssStyle: ['css/main/books_main.css', 'css/main/navbar.css'] }) %>
 <%- include('../template/main/navbar') %>
 
 <div class="container mx-auto py-8 mt-24 main-books-bg text-gray-100">
@@ -68,6 +68,5 @@
     </div>
   </div>
 </div>
-<script src="/js/carousel-books.js"></script>
-<script src="/js/book-modal.js"></script>
-<%- include('../template/main/footer') %>
+
+<%- include('../template/main/footer', { jsStyle: ['js/carousel-books.js', 'js/book-modal.js'] }) %>

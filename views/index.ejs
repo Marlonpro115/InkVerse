@@ -1,4 +1,4 @@
-<%- include('./template/main/head', { cssStyle: 'css/output.css' }) %>
+<%- include('./template/main/head', { cssStyle: ['css/main/navbar.css'] }) %>
 <%- include('./template/main/navbar') %>
 
 <div class="min-h-screen bg-indigo-950 text-gray-100">
@@ -204,4 +204,4 @@
 
 </div>
 
-<%- include('./template/main/footer') %>
+<%- include('./template/main/footer', { jsStyle: ['js/main.js'] }) %>

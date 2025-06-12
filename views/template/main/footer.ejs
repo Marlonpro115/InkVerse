@@ -65,7 +65,14 @@
 </footer>
 
 <!-- Scripts -->
-<script src="../js/main.js"></script>
+<% if (Array.isArray(jsStyle)) { %>
+  <% jsStyle.forEach(function(js) { %>
+    <script src="/<%= js %>"></script>
+  <% }) %>
+<% } else if (jsStyle) { %>
+  <script src="/<%= jsStyle %>"></script>
+<% } %>
+
 </body>
 
 </html>

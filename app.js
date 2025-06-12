@@ -23,14 +23,30 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  cookie: { maxAge: 60000 },
-  store: new session.MemoryStore,
-  saveUninitialized: true,
-  resave: 'true',
+  cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 día
+  store: new session.MemoryStore(),
+  saveUninitialized: false,
+  resave: false,
   secret: 'secret'
 }));
 
 app.use(flash());
+
+// Middleware para pasar el usuario a todas las vistas
+app.use((req, res, next) => {
+  if (req.session.user) {
+    res.locals.user = {
+      name: req.session.user.name,
+      email: req.session.user.email,
+      username: req.session.user.username || null,
+      profile_picture: req.session.user.profile_picture || null,
+      profile_cover: req.session.user.profile_cover || null,
+    };
+  } else {
+    res.locals.user = null;
+  }
+  next();
+});
 
 // Main routes
 const indexRouter = require('./routes/index');
@@ -48,6 +64,9 @@ const authRouter = require('./routes/auth/auth');
 const registerRouter = require('./routes/auth/register');
 const forgotPasswordRouter = require('./routes/auth/forgot-password');
 
+// Profile route
+const profileRouter = require('./routes/main/profile/index');
+
 // Main routes
 app.use('/', indexRouter);
 app.use('/books', booksMainRouter);
@@ -60,9 +79,12 @@ app.use('/dashboard/categories', categoriesRouter);
 app.use('/dashboard/publishers', publishersRouter);
 
 // Authentication routes
-app.use('/auth/login', authRouter);
+app.use('/auth', authRouter);
 app.use('/auth/register', registerRouter);
 app.use('/auth/forgot-password', forgotPasswordRouter);
+
+// Profile route
+app.use('/profile', profileRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

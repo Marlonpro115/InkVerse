@@ -15,7 +15,13 @@
     <link rel="shortcut icon" href="/img/libros.png" type="image/x-icon">
 
     <!-- Estilos personalizados -->
-    <link rel="stylesheet" href="/<%= cssStyle %>">
+    <% if (Array.isArray(cssStyle)) { %>
+      <% cssStyle.forEach(function(css) { %>
+        <link rel="stylesheet" href="/<%= css %>">
+      <% }) %>
+    <% } else if (cssStyle) { %>
+      <link rel="stylesheet" href="/<%= cssStyle %>">
+    <% } %>
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" href="/css/output.css">
