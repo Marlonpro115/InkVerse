@@ -69,6 +69,7 @@ const forgotPasswordRouter = require('./routes/auth/forgot-password');
 
 // Profile route
 const profileRouter = require('./routes/main/profile/index');
+const profileSettingsRouter = require('./routes/main/profile/settings');
 
 // Main routes
 app.use('/', indexRouter);
@@ -88,6 +89,7 @@ app.use('/auth/forgot-password', forgotPasswordRouter);
 
 // Profile route
 app.use('/profile', profileRouter);
+app.use('/settings', profileSettingsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

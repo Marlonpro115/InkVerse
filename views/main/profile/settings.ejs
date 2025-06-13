@@ -1,0 +1,89 @@
+<%- include('../../template/main/head', { titleWeb: 'Ajustes de Privacidad', cssStyle: ['css/main/navbar.css', 'css/main/profile/settings.css'] }) %>
+<%- include('../../template/main/navbar') %>
+
+<!-- Toast de éxito moderno, parte inferior derecha -->
+<% if (typeof success !== 'undefined' && success) { %>
+  <div id="toast-success" class="toast-success">
+    <svg class="toast-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    <span><%= success %></span>
+    <button class="toast-close-btn" onclick="document.getElementById('toast-success').classList.add('fade-out-toast'); setTimeout(() => { document.getElementById('toast-success').style.display = 'none'; }, 500);" aria-label="Cerrar notificación">&times;</button>
+  </div>
+  <script>
+    setTimeout(() => {
+      const toast = document.getElementById('toast-success');
+      if (toast) {
+        toast.classList.add('fade-out-toast');
+        setTimeout(() => { toast.style.display = 'none'; }, 500);
+      }
+    }, 3500);
+  </script>
+<% } %>
+
+<div class="container mx-auto py-12 mt-20 px-4">
+  <h1 class="text-4xl font-extrabold text-center mb-10 text-gray-800 dark:text-white">
+    Ajustes de Privacidad
+  </h1>
+
+  <!-- Agrega la clase personalizada animate-fadeInUp -->
+  <form action="/settings/privacy" method="POST"
+    class="animate-fadeInUp max-w-2xl mx-auto bg-white dark:bg-gray-900 rounded-3xl shadow-2xl p-10 flex flex-col gap-8">
+    
+    <!-- Campo 1 -->
+    <div>
+      <label class="block font-bold mb-3 text-gray-700 dark:text-gray-200 text-lg">Perfil en general</label>
+      <select name="privacy_profile_general"
+        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white px-4 py-3 focus:ring-2 focus:ring-blue-500">
+        <option value="public">Público</option>
+        <option value="friends">Solo amigos</option>
+        <option value="private">Privado</option>
+      </select>
+      <p class="text-sm text-gray-500 mt-2">Controla quién puede ver tu perfil completo.</p>
+    </div>
+
+    <!-- Campo 2 -->
+    <div>
+      <label class="block font-bold mb-3 text-gray-700 dark:text-gray-200 text-lg">Foto de perfil</label>
+      <select name="privacy_profile_picture"
+        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white px-4 py-3 focus:ring-2 focus:ring-blue-500">
+        <option value="public">Público</option>
+        <option value="friends">Solo amigos</option>
+        <option value="private">Privado</option>
+      </select>
+      <p class="text-sm text-gray-500 mt-2">Elige quién puede ver tu foto de perfil.</p>
+    </div>
+
+    <!-- Campo 3 -->
+    <div>
+      <label class="block font-bold mb-3 text-gray-700 dark:text-gray-200 text-lg">Portada</label>
+      <select name="privacy_profile_cover"
+        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white px-4 py-3 focus:ring-2 focus:ring-blue-500">
+        <option value="public">Público</option>
+        <option value="friends">Solo amigos</option>
+        <option value="private">Privado</option>
+      </select>
+      <p class="text-sm text-gray-500 mt-2">Elige quién puede ver tu imagen de portada.</p>
+    </div>
+
+    <!-- Campo 4 -->
+    <div>
+      <label class="block font-bold mb-3 text-gray-700 dark:text-gray-200 text-lg">Información personal</label>
+      <select name="privacy_personal_info"
+        class="w-full rounded-xl border border-gray-300 dark:border-gray-700 dark:bg-gray-800 dark:text-white px-4 py-3 focus:ring-2 focus:ring-blue-500">
+        <option value="public">Público</option>
+        <option value="friends">Solo amigos</option>
+        <option value="private">Privado</option>
+      </select>
+      <p class="text-sm text-gray-500 mt-2">Controla la visibilidad de tus datos personales (nombre, correo, etc.).</p>
+    </div>
+
+    <!-- Botón con hover atractivo -->
+    <button type="submit"
+      class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-xl transition-all duration-300 shadow-md hover:shadow-xl transform hover:scale-105">
+      Guardar cambios
+    </button>
+
+  </form>
+</div>
+
+
+<%- include('../../template/main/footer', { jsStyle: ['js/main.js'] }) %>
