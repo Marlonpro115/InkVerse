@@ -5,7 +5,7 @@ const connection = require('../../lib/db');
 
 // Mostrar formulario login
 router.get('/login', (req, res) => {
-    res.render('auth/login', { error: null });
+    res.render('auth/login', { error: null, success: null });
 });
 
 // Procesar login
@@ -13,7 +13,7 @@ router.post('/login', (req, res) => {
     const { userIdentifier, password } = req.body;
 
     // Buscar por email o username
-    const query = `SELECT u.*, up.profile_picture FROM users u LEFT JOIN user_profiles up ON u.id_user = up.user_id WHERE u.email = ? OR u.username = ?`;
+    const query = `SELECT u.*, up.profile_picture, up.profile_cover, up.about FROM users u LEFT JOIN user_profiles up ON u.id_user = up.user_id WHERE u.email = ? OR u.username = ?`;
     connection.query(query, [userIdentifier, userIdentifier], async (err, results) => {
         if (err) {
             return res.render('auth/login', { error: 'Error en el servidor' });
@@ -30,7 +30,14 @@ router.post('/login', (req, res) => {
 
         // Elimina la contraseña antes de guardar en sesión
         delete user.password;
-        req.session.user = { ...user };
+        // Asegura que el id_user esté presente en la sesión
+        req.session.user = { 
+            ...user, 
+            id_user: user.id_user, 
+            profile_picture: user.profile_picture, 
+            profile_cover: user.profile_cover,
+            about: user.about
+        };
 
         res.redirect('/'); // Redirigir al inicio en vez de dashboard
     });

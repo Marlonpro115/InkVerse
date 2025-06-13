@@ -1,0 +1,214 @@
+/* Toasts personalizados para InkVerse */
+
+.toast-success {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 2147483647;
+    background: #023216;
+    /* Verde oscuro sólido */
+    color: #16a34a;
+    padding: 16px 28px 16px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px 0 rgba(34, 197, 94, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: fadeInToast 0.5s;
+    transition: opacity 0.5s, transform 0.5s;
+    border: 2px solid #16a34a;
+}
+
+.toast-success .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #16a34a;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: color 0.2s;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-success .toast-close-btn:hover {
+    color: #22c55e;
+    background: rgba(34, 197, 94, 0.08);
+}
+
+.toast-info {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 2147483647;
+    background: #03193e;
+    /* Azul oscuro sólido */
+    color: #2563eb;
+    padding: 16px 28px;
+    border-radius: 12px;
+    box-shadow: 0 4px 24px 0 rgba(37, 99, 235, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.1rem;
+    font-weight: 500;
+    animation: fadeInToast 0.5s;
+    transition: opacity 0.5s, transform 0.5s;
+    border: 2px solid #2563eb;
+}
+
+.toast-info .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #2563eb;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: color 0.2s;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-info .toast-close-btn:hover {
+    color: #1e293b;
+    background: rgba(37, 99, 235, 0.08);
+}
+
+.toast-error {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 2147483647;
+    background: #7f1d1d;
+    /* Rojo oscuro */
+    color: #dc2626;
+    /* Rojo fuerte */
+    padding: 16px 28px 16px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px 0 rgba(220, 38, 38, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: fadeInToast 0.5s;
+    transition: opacity 0.5s, transform 0.5s;
+    border: 2px solid #dc2626;
+}
+
+.toast-error .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #dc2626;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: color 0.2s;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-error .toast-close-btn:hover {
+    color: #7f1d1d;
+    background: rgba(220, 38, 38, 0.08);
+}
+
+.toast-warning {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 2147483647;
+    background: #92400e;
+    /* Amarillo oscuro */
+    color: #f59e42;
+    /* Amarillo fuerte */
+    padding: 16px 28px 16px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 24px 0 rgba(245, 158, 66, 0.18);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: fadeInToast 0.5s;
+    transition: opacity 0.5s, transform 0.5s;
+    border: 2px solid #f59e42;
+}
+
+.toast-warning .toast-close-btn {
+    background: transparent;
+    border: none;
+    color: #f59e42;
+    font-size: 1.5rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 8px;
+    transition: color 0.2s;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.toast-warning .toast-close-btn:hover {
+    color: #92400e;
+    background: rgba(245, 158, 66, 0.08);
+}
+
+.fade-out-toast {
+    opacity: 0 !important;
+    transform: translateY(30px) scale(0.98) !important;
+    pointer-events: none;
+    transition: opacity 0.5s, transform 0.5s;
+}
+
+.toast-icon {
+    width: 24px;
+    height: 24px;
+    color: #fff;
+}
+
+@keyframes fadeInToast {
+    0% {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 600px) {
+
+    .toast-success,
+    .toast-info,
+    .toast-error,
+    .toast-warning {
+        right: 8px;
+        left: 8px;
+        bottom: 12px;
+        padding: 12px 10px;
+        font-size: 1rem;
+    }
+}

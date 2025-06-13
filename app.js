@@ -23,7 +23,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  cookie: { maxAge: 1000 * 60 * 60 * 24 }, // 1 día
+  cookie: { maxAge: 1000 * 60 * 60 * 24 },
   store: new session.MemoryStore(),
   saveUninitialized: false,
   resave: false,
@@ -36,11 +36,14 @@ app.use(flash());
 app.use((req, res, next) => {
   if (req.session.user) {
     res.locals.user = {
+      user_id: req.session.user.id_user,
       name: req.session.user.name,
       email: req.session.user.email,
-      username: req.session.user.username || null,
-      profile_picture: req.session.user.profile_picture || null,
-      profile_cover: req.session.user.profile_cover || null,
+      about: req.session.user.about,
+      role: req.session.user.role,
+      username: req.session.user.username,
+      profile_picture: req.session.user.profile_picture,
+      profile_cover: req.session.user.profile_cover,
     };
   } else {
     res.locals.user = null;

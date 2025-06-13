@@ -76,6 +76,9 @@ CREATE TABLE IF NOT EXISTS user_profiles (
   address VARCHAR(255),
   profile_picture VARCHAR(255),
   profile_cover VARCHAR(255),
+  membership_type ENUM('basic', 'premium') DEFAULT 'basic',
+  points INT DEFAULT 0,
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -87,6 +90,7 @@ CREATE TABLE IF NOT EXISTS admin_profiles (
   profile_picture VARCHAR(255),
   profile_cover VARCHAR(255),
   admin_level ENUM('super', 'moderator') DEFAULT 'moderator',
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -99,6 +103,7 @@ CREATE TABLE IF NOT EXISTS librarian_profiles (
   profile_cover VARCHAR(255),
   work_shift ENUM('morning', 'afternoon', 'night'),
   hire_date DATE,
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -111,18 +116,7 @@ CREATE TABLE IF NOT EXISTS author_profiles (
   profile_cover VARCHAR(255),
   biography TEXT,
   website VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- Tabla de perfiles de clientes
-CREATE TABLE IF NOT EXISTS client_profiles (
-  user_id INT PRIMARY KEY,
-  phone VARCHAR(20),
-  address VARCHAR(255),
-  profile_picture VARCHAR(255),
-  profile_cover VARCHAR(255),
-  membership_type ENUM('basic', 'premium') DEFAULT 'basic',
-  points INT DEFAULT 0,
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

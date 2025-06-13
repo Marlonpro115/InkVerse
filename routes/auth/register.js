@@ -53,7 +53,7 @@ router.post('/', async (req, res) => {
                     connection.query(insertProfile, [user_id, phone || null], (err) => {
                         if (err) return res.render('auth/register', { error: 'Error al crear perfil.', success: null });
                         // Registro exitoso
-                        res.render('auth/register', { error: null, success: '¡Registro exitoso! Ahora puedes iniciar sesión.' });
+                        res.render('auth/login', { error: null, success: '¡Registro exitoso! Ahora puedes iniciar sesión.' });
                     });
                 });
             });

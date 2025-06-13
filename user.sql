@@ -1,3 +1,24 @@
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS db_library;
+USE db_library;
+
+-- Crear tabla de roles primero para evitar problemas de FK
+CREATE TABLE IF NOT EXISTS roles (
+  id_role INT AUTO_INCREMENT PRIMARY KEY,
+  name ENUM('user', 'admin', 'librarian', 'author') UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insertar roles básicos solo si no existen
+INSERT INTO roles (name)
+SELECT * FROM (SELECT 'user') AS tmp WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'user') LIMIT 1;
+INSERT INTO roles (name)
+SELECT * FROM (SELECT 'admin') AS tmp WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'admin') LIMIT 1;
+INSERT INTO roles (name)
+SELECT * FROM (SELECT 'librarian') AS tmp WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'librarian') LIMIT 1;
+INSERT INTO roles (name)
+SELECT * FROM (SELECT 'author') AS tmp WHERE NOT EXISTS (SELECT 1 FROM roles WHERE name = 'author') LIMIT 1;
+
+-- Tabla de usuarios
 CREATE TABLE IF NOT EXISTS users (
   id_user INT AUTO_INCREMENT PRIMARY KEY,
   first_name VARCHAR(50) NOT NULL,
@@ -17,61 +38,49 @@ CREATE TABLE IF NOT EXISTS users (
   FOREIGN KEY (role_id) REFERENCES roles(id_role)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-CREATE TABLE IF NOT EXISTS roles (
-  id_role INT AUTO_INCREMENT PRIMARY KEY,
-  name ENUM('user', 'admin', 'librarian', 'author') UNIQUE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
+-- Tabla de perfiles de usuario
 CREATE TABLE IF NOT EXISTS user_profiles (
   user_id INT PRIMARY KEY,
   phone VARCHAR(20),
   address VARCHAR(255),
-  profile_picture VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS admin_profiles (
-  user_id INT PRIMARY KEY,
-  admin_level ENUM('super', 'moderator') DEFAULT 'moderator',
-  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS librarian_profiles (
-  user_id INT PRIMARY KEY,
-  work_shift ENUM('morning', 'afternoon', 'night'),
-  hire_date DATE,
-  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS author_profiles (
-  user_id INT PRIMARY KEY,
-  biography TEXT,
-  website VARCHAR(255),
-  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-CREATE TABLE IF NOT EXISTS client_profiles (
-  user_id INT PRIMARY KEY,
+  profile_picture VARCHAR(255) DEFAULT,
+  profile_cover VARCHAR(255) DEFAULT,
   membership_type ENUM('basic', 'premium') DEFAULT 'basic',
   points INT DEFAULT 0,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insertar roles (solo una vez)
-INSERT INTO roles (name) VALUES ('user'), ('admin'), ('librarian'), ('author')
-  ON DUPLICATE KEY UPDATE name = name;
+-- Tabla de perfiles de administradores
+CREATE TABLE IF NOT EXISTS admin_profiles (
+  user_id INT PRIMARY KEY,
+  phone VARCHAR(20),
+  address VARCHAR(255),
+  profile_picture VARCHAR(255),
+  profile_cover VARCHAR(255),
+  admin_level ENUM('super', 'moderator') DEFAULT 'moderator',
+  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Insertar usuarios de ejemplo (ahora con role_id)
--- Suponiendo que los ids de roles son: user=1, admin=2, librarian=3, author=4
-INSERT INTO users (first_name, middle_name, last_name, second_last_name, username, document_type, document_number, birth_date, email, password, role_id, created_at)
-VALUES
-('Marlon', 'Agusto', 'Perez', 'Hernandez', 'Marlonpro115', 'CC', '1104257462', '2004-12-16', 'marlonperezhe@gmail.com', '23124477', 2, CURRENT_TIMESTAMP),
-('Ana', NULL, 'García', 'López', 'anagarcia', 'CC', '1104257463', '1990-05-10', 'ana.garcia@email.com', 'password123', 1, CURRENT_TIMESTAMP),
-('Luis', 'Fernando', 'Martínez', NULL, 'luisfm', 'TI', '1104257464', '1985-08-22', 'luis.martinez@email.com', 'password456', 1, CURRENT_TIMESTAMP);
+-- Tabla de perfiles de bibliotecarios
+CREATE TABLE IF NOT EXISTS librarian_profiles (
+  user_id INT PRIMARY KEY,
+  phone VARCHAR(20),
+  address VARCHAR(255),
+  profile_picture VARCHAR(255),
+  profile_cover VARCHAR(255),
+  work_shift ENUM('morning', 'afternoon', 'night'),
+  hire_date DATE,
+  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Ejemplo de perfiles extendidos (opcional)
-INSERT INTO admin_profiles (user_id, admin_level) VALUES (1, 'super');
-INSERT INTO user_profiles (user_id, phone, address, profile_picture) VALUES
-  (1, '3001234567', 'Calle 1 #2-3', NULL),
-  (2, '3007654321', 'Carrera 4 #5-6', NULL),
-  (3, '3012345678', 'Avenida 7 #8-9', NULL);
+-- Tabla de perfiles de autores
+CREATE TABLE IF NOT EXISTS author_profiles (
+  user_id INT PRIMARY KEY,
+  phone VARCHAR(20),
+  address VARCHAR(255),
+  profile_picture VARCHAR(255),
+  profile_cover VARCHAR(255),
+  biography TEXT,
+  website VARCHAR(255),
+  FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

@@ -1,5 +1,42 @@
-<%- include('../../template/main/head', { titleWeb: 'Perfil de Usuario', cssStyle: ['css/main/navbar.css'] }) %>
+<%- include('../../template/main/head', { titleWeb: 'Perfil', cssStyle: ['css/main/navbar.css', 'css/main/profile/index.css', 'css/main/profile/cropper-modal.css'] }) %>
+<!-- Cropper.js CSS CDN -->
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <%- include('../../template/main/navbar') %>
+
+<!-- Toast de éxito moderno, parte inferior derecha -->
+<% if (typeof success !== 'undefined' && success) { %>
+  <div id="toast-success" class="toast-success">
+    <svg class="toast-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    <span><%= success %></span>
+    <button class="toast-close-btn" onclick="document.getElementById('toast-success').classList.add('fade-out-toast'); setTimeout(() => { document.getElementById('toast-success').style.display = 'none'; }, 500);" aria-label="Cerrar notificación">&times;</button>
+  </div>
+  <script>
+    setTimeout(() => {
+      const toast = document.getElementById('toast-success');
+      if (toast) {
+        toast.classList.add('fade-out-toast');
+        setTimeout(() => { toast.style.display = 'none'; }, 500);
+      }
+    }, 3500);
+  </script>
+<% } %>
+
+<!-- Toast informativo personalizado para la página de perfil -->
+<% if (typeof info !== 'undefined' && info) { %>
+  <div id="toast-info" class="toast-info">
+    <svg class="toast-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 16v-4m0-4h.01"/></svg>
+    <span><%= info %></span>
+  </div>
+  <script>
+    setTimeout(() => {
+      const toast = document.getElementById('toast-info');
+      if (toast) {
+        toast.classList.add('fade-out-toast');
+        setTimeout(() => { toast.style.display = 'none'; }, 500);
+      }
+    }, 3500);
+  </script>
+<% } %>
 
 <% 
 // Colores de portada alternativos
@@ -12,55 +49,68 @@ const coverColors = [
 ];
 const randomColor = coverColors[Math.floor(Math.random() * coverColors.length)];
 %>
-<!-- DEPURACIÓN: Mostrar valores de los campos de imagen -->
-<% if (user) { %>
-  <div style="background:#fee; color:#900; padding:4px; font-size:12px;">
-    profile_picture: <%= user.profile_picture %> | profile_cover: <%= user.profile_cover %>
-  </div>
-<% } %>
-<section class="w-full overflow-hidden dark:bg-gray-900 pt-20"><!-- padding top para dejar espacio al navbar -->
+<br>
+<div class="dark:bg-gray-900 pt-6"></div>
+<section class="w-full overflow-hidden dark:bg-gray-900 pt-4">
     <div class="w-full mx-auto">
         <!-- User Cover IMAGE o color -->
-        <div class="relative">
-            <% if (user && user.profile_cover) { %>
-                <img src="/uploads/profile/userCover/<%= user.profile_cover %>" alt="User Cover"
-                    onerror="this.onerror=null;this.src='/uploads/profile/no_cover_available.png';"
-                    class="w-full xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] h-[9.5rem] object-cover" />
-            <% } else { %>
-                <div class="w-full xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] h-[9.5rem] <%= randomColor %> flex items-center justify-center">
-                    <span class="text-white text-3xl font-bold opacity-40">Sin portada</span>
-                </div>
-            <% } %>
-            <!-- Botón editar portada -->
-            <button class="absolute top-4 right-4 bg-white bg-opacity-80 hover:bg-opacity-100 text-indigo-700 font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-2" onclick="document.getElementById('editCoverInput').click()">
-                <i class="bi bi-image"></i> Editar portada
-            </button>
-            <form id="coverForm" action="/profile/edit-cover" method="POST" enctype="multipart/form-data" class="hidden">
-                <input type="file" id="editCoverInput" name="profile_cover" accept="image/*" onchange="this.form.submit()" />
+        <!-- Contenedor principal de la portada -->
+<div class="relative">
+    <% if (user && user.profile_cover) { %>
+        <img src="/uploads/profile/userCover/<%= user.profile_cover %>" alt="User Cover"
+            onerror="this.onerror=null;this.src='/uploads/profile/no_cover_available.png';"
+            class="w-full xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] h-[9.5rem] object-cover" />
+    <% } else { %>
+        <div class="w-full xl:h-[20rem] lg:h-[22rem] md:h-[16rem] sm:h-[13rem] h-[9.5rem] <%= randomColor %> flex items-center justify-center">
+            <span class="text-white text-3xl font-bold opacity-40">Sin portada</span>
+        </div>
+    <% } %>
+    <!-- Botón editar portada -->
+    <button class="absolute top-4 right-4 bg-white bg-opacity-80 hover:bg-opacity-100 text-indigo-700 font-semibold px-4 py-2 rounded-lg shadow transition flex items-center gap-2" onclick="document.getElementById('editCoverInput').click()">
+        <i class="bi bi-image"></i> Editar portada
+    </button>
+    <form id="coverForm" action="/profile/edit-cover" method="POST" enctype="multipart/form-data" class="hidden">
+        <input type="file" id="editCoverInput" name="profile_cover" accept="image/*" onchange="this.form.submit()" />
+    </form>
+
+    <!-- Imagen de perfil SUPERPUESTA -->
+    <div class="profile-image-center">
+        <div class="relative inline-block">
+            <img src="<%= user && user.profile_picture ? ('/uploads/profile/userProfile/' + user.profile_picture) : '/uploads/profile/default.png' %>" alt="Foto de perfil"
+                onerror="this.onerror=null;this.src='/uploads/profile/default.png';"
+                class="rounded-full object-cover xl:w-[16rem] xl:h-[16rem] lg:w-[16rem] lg:h-[16rem] md:w-[12rem] md:h-[12rem] sm:w-[10rem] sm:h-[10rem] w-[8rem] h-[8rem] outline outline-2 outline-offset-2 outline-yellow-500 shadow-xl" />
+            <!-- Botón editar foto perfil -->
+            <label for="editProfileInput" class="absolute bottom-2 right-2 bg-white bg-opacity-80 hover:bg-opacity-100 text-indigo-700 font-semibold px-3 py-1 rounded-full shadow transition flex items-center gap-1 cursor-pointer z-10">
+                <i class="bi bi-camera"></i>
+            </label>
+            <form id="profilePicForm" action="/profile/edit-picture" method="POST" enctype="multipart/form-data" class="hidden">
+                <input type="file" id="editProfileInput" name="profile_picture" accept="image/*" />
             </form>
         </div>
-
-        <!-- User Profile Image -->
-        <div class="w-full mx-auto flex justify-center relative">
-            <div class="relative inline-block">
-                <img src="<%= user && user.profile_picture ? ('/uploads/profile/userProfile/' + user.profile_picture) : '/uploads/profile/7e68b3ecaa05febd9949a1a1c40c825a.jpg' %>" alt="Foto de perfil"
-                    onerror="this.onerror=null;this.src='/uploads/profile/7e68b3ecaa05febd9949a1a1c40c825a.jpg';"
-                    class="rounded-full object-cover xl:w-[16rem] xl:h-[16rem] lg:w-[16rem] lg:h-[16rem] md:w-[12rem] md:h-[12rem] sm:w-[10rem] sm:h-[10rem] w-[8rem] h-[8rem] outline outline-2 outline-offset-2 outline-yellow-500 shadow-xl" />
-                <!-- Botón editar foto perfil mejorado -->
-                <label for="editProfileInput" class="absolute bottom-2 right-2 bg-white bg-opacity-80 hover:bg-opacity-100 text-indigo-700 font-semibold px-3 py-1 rounded-full shadow transition flex items-center gap-1 cursor-pointer z-10">
-                    <i class="bi bi-camera"></i>
-                </label>
-                <form id="profilePicForm" action="/profile/edit-picture" method="POST" enctype="multipart/form-data" class="hidden">
-                    <input type="file" id="editProfileInput" name="profile_picture" accept="image/*" onchange="this.form.submit()" style="display:none;" />
-                </form>
-            </div>
-        </div>
+    </div>
+</div>
+<!-- Modal de recorte de imagen de perfil -->
+<div id="cropper-modal" class="cropper-modal-bg" style="display:none;">
+  <div class="cropper-modal-content">
+    <img id="cropper-image" src="#" alt="Recortar imagen" />
+    <div class="cropper-modal-actions">
+      <button type="button" id="cropper-cancel-btn" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded">Cancelar</button>
+      <button type="button" id="cropper-confirm-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Recortar y subir</button>
+    </div>
+  </div>
+</div>
 
         <div
             class="xl:w-[80%] lg:w-[90%] md:w-[94%] sm:w-[96%] w-[92%] mx-auto flex flex-col gap-4 justify-center items-center relative"
-            style="z-index:0; margin-top:-2.2rem; padding-top:7rem;">
+            style="z-index:0; margin-top:3rem; padding-top:7rem;">
             <!-- FullName -->
             <h1 class="text-center text-gray-800 dark:text-white text-4xl font-serif"><%= user && (user.username ? user.username : user.name) %></h1>
+            <!-- Botón editar perfil centrado debajo del nombre -->
+            <div class="w-full flex justify-center mt-4 z-20 relative">
+                <a href="/profile/edit" class="edit-profile-btn inline-flex items-center gap-2 px-5 py-2 rounded-lg shadow-lg font-semibold text-base focus:outline-none focus:ring-2 focus:ring-indigo-400">
+                    <i class="bi bi-pencil-square"></i> Editar perfil
+                </a>
+            </div>
             <!-- About -->
             <p class="w-full text-gray-700 dark:text-gray-400 text-md text-pretty sm:text-center text-justify">
                 <% if (user && user.about) { %>
@@ -95,4 +145,4 @@ const randomColor = coverColors[Math.floor(Math.random() * coverColors.length)];
     </div>
 </section>
 
-<%- include('../../template/main/footer', { jsStyle: ['js/main.js'] }) %>
+<%- include('../../template/main/footer', { jsStyle: ['js/main.js', 'js/main/profile/cropper-modal.js'] }) %>
