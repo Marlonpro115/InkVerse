@@ -1,60 +1,71 @@
-<!-- Navbar solo para pantallas pequeñas -->
-<nav class="navbar navbar-dark bg-dark d-md-none">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
-      <span class="navbar-toggler-icon"></span>
+<!-- Navbar superior fija y visible -->
+<nav class="bg-gradient-to-r from-indigo-900 via-purple-800 to-blue-800 shadow-md fixed top-0 left-0 w-full z-50 flex items-center justify-between px-4 py-3">
+  <div class="flex items-center gap-2">
+    <button id="dashboard-menu-toggle" aria-label="Abrir menú" class="text-white focus:outline-none md:hidden">
+      <i class="bi bi-list text-2xl"></i>
     </button>
-    <span class="navbar-brand mb-0 h1">Biblioteca</span>
+    <span class="text-white font-bold text-xl tracking-wide flex items-center gap-2">
+      <i class="bi bi-menu-button-wide"></i> Dashboard
+    </span>
+  </div>
+  <div class="relative">
+    <button id="userDropdownBtn" class="flex items-center gap-2 px-3 py-1 rounded-lg bg-indigo-800 bg-opacity-80 hover:bg-indigo-700 border border-indigo-300 text-indigo-100 font-semibold transition-all duration-200">
+      <i class="bi bi-person-circle text-xl"></i>
+      <span class="hidden md:inline">Usuario</span>
+      <i class="bi bi-caret-down-fill ml-1"></i>
+    </button>
+    <!-- Dropdown usuario -->
+    <div id="userDropdownMenu" class="hidden absolute right-0 mt-2 w-44 bg-white rounded-xl shadow-2xl py-2 z-50 border border-indigo-200 transition-all duration-300 origin-top scale-95 opacity-0 pointer-events-none animate-none">
+      <a href="/profile" class="flex px-4 py-2 text-indigo-800 hover:bg-indigo-100 transition items-center gap-2">
+        <i class="bi bi-person-lines-fill"></i> Ver perfil
+      </a>
+      <a href="/settings" class="flex px-4 py-2 text-indigo-800 hover:bg-indigo-100 transition items-center gap-2">
+        <i class="bi bi-gear"></i> Configuración
+      </a>
+      <a href="/auth/logout" class="flex px-4 py-2 text-red-600 hover:bg-red-100 transition items-center gap-2">
+        <i class="bi bi-box-arrow-right"></i> Cerrar sesión
+      </a>
+    </div>
   </div>
 </nav>
 
-<div class="d-flex flex-grow-1">
-
-  <!-- Sidebar para pantallas grandes -->
-  <nav class="sidebar d-none d-md-flex flex-column p-3 text-white bg-dark" style="min-width: 200px;">
-    <h4 class="text-white mb-4"><i class="bi bi-book"></i> Biblioteca</h4>
-    <ul class="nav nav-pills flex-column">
-      <li class="nav-item">
-        <a href="/dashboard" class="nav-link "><i class="bi bi-house"></i> Inicio</a>
-      </li>
-      <li class="nav-item">
-        <a href="/dashboard/books" class="nav-link text-white"><i class="bi bi-book-fill"></i> Libros</a>
-      </li>
-      <li class="nav-item">
-        <a href="/dashboard/authors" class="nav-link text-white"><i class="bi bi-person-lines-fill"></i> Autores</a>
-      </li>
-      <li class="nav-item">
-        <a href="/dashboard/publishers" class="nav-link text-white"><i class="bi bi-building"></i> Editoriales</a>
-      </li>
-      <li class="nav-item">
-        <a href="/dashboard/categories" class="nav-link text-white"><i class="bi bi-tags-fill"></i> Categorías</a>
-      </li>
-    </ul>
-  </nav>
-
-  <!-- Offcanvas para pantallas pequeñas -->
-  <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
-    <div class="offcanvas-header">
-      <h5 class="offcanvas-title">Menú</h5>
-      <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+<!-- Sidebar móvil (offcanvas) -->
+<div id="dashboard-mobile-menu" class="fixed inset-0 z-[9999] bg-black bg-opacity-40 flex md:hidden">
+  <div class="absolute left-0 top-0 h-full w-64 bg-gradient-to-b from-indigo-900 via-purple-900 to-blue-900 shadow-2xl flex flex-col animate-slideInLeft">
+    <div class="flex items-center justify-between px-6 py-6 border-b border-indigo-700 relative">
+      <span class="font-bold text-lg tracking-wide text-white">Menú</span>
+      <button id="dashboard-menu-close" class="absolute right-4 top-4 bg-gradient-to-br from-indigo-600 via-purple-600 to-blue-600 hover:from-indigo-800 hover:to-blue-800 text-white rounded-full shadow-lg focus:outline-none z-50 transition-all duration-300 hover:scale-110 hover:rotate-90 flex items-center justify-center" style="width: 44px; height: 44px;">
+        <i class="bi bi-x-lg text-2xl"></i>
+      </button>
     </div>
-    <div class="offcanvas-body">
-      <ul class="nav nav-pills flex-column">
-        <li class="nav-item">
-          <a href="/dashboard" class="nav-link text-white"><i class="bi bi-house"></i> Inicio</a>
+    <nav class="flex-1 px-4 py-6">
+      <ul class="space-y-2">
+        <li>
+          <a href="/dashboard" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-800 transition font-medium text-white">
+            <i class="bi bi-house"></i> <span>Inicio</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <a href="/dashboard/books" class="nav-link text-white"><i class="bi bi-book-fill"></i> Libros</a>
+        <li>
+          <a href="/dashboard/books" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-purple-800 transition font-medium text-white">
+            <i class="bi bi-book-fill"></i> <span>Libros</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <a href="/dashboard/authors" class="nav-link text-white"><i class="bi bi-person-lines-fill"></i> Autores</a>
+        <li>
+          <a href="/dashboard/authors" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-800 transition font-medium text-white">
+            <i class="bi bi-person-lines-fill"></i> <span>Autores</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <a href="/dashboard/publishers" class="nav-link text-white"><i class="bi bi-building"></i> Editoriales</a>
+        <li>
+          <a href="/dashboard/publishers" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-700 transition font-medium text-white">
+            <i class="bi bi-building"></i> <span>Editoriales</span>
+          </a>
         </li>
-        <li class="nav-item">
-          <a href="/dashboard/categories" class="nav-link text-white"><i class="bi bi-tags-fill"></i> Categorías</a>
+        <li>
+          <a href="/dashboard/categories" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-purple-700 transition font-medium text-white">
+            <i class="bi bi-tags-fill"></i> <span>Categorías</span>
+          </a>
         </li>
       </ul>
-    </div>
+    </nav>
   </div>
+</div>

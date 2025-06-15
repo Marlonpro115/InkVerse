@@ -1,185 +1,307 @@
-<%- include('../../template/dashboard/head', { titleWeb: 'Libros' , cssStyle: 'css/style.css' }) %>
+<%- include('../../template/dashboard/head', { titleWeb: 'Inicio' , cssStyle: ['css/dashboard/navbar.css'] }) %>
+<%- include('../../template/dashboard/navbar') %>
 
-  <%- include('../../template/dashboard/navbar') %>
+<!-- Toast de éxito moderno, parte inferior derecha -->
+<% if (typeof success !== 'undefined' && success) { %>
+  <div id="toast-success" class="toast-success">
+    <svg class="toast-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+    <span><%= success %></span>
+    <button class="toast-close-btn" onclick="document.getElementById('toast-success').classList.add('fade-out-toast'); setTimeout(() => { document.getElementById('toast-success').style.display = 'none'; }, 500);" aria-label="Cerrar notificación">&times;</button>
+  </div>
+  <script>
+    setTimeout(() => {
+      const toast = document.getElementById('toast-success');
+      if (toast) {
+        toast.classList.add('fade-out-toast');
+        setTimeout(() => { toast.style.display = 'none'; }, 500);
+      }
+    }, 8000);
+  </script>
+<% } %>
+<% if (typeof error !== 'undefined' && error) { %>
+  <div id="toast-error" class="toast-error">
+    <svg class="toast-icon" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg>
+    <span><%= error %></span>
+    <button class="toast-close-btn" onclick="document.getElementById('toast-error').classList.add('fade-out-toast'); setTimeout(() => { document.getElementById('toast-error').style.display = 'none'; }, 500);" aria-label="Cerrar notificación">&times;</button>
+  </div>
+  <script>
+    setTimeout(() => {
+      const toast = document.getElementById('toast-error');
+      if (toast) {
+        toast.classList.add('fade-out-toast');
+        setTimeout(() => { toast.style.display = 'none'; }, 500);
+      }
+    }, 8000);
+  </script>
+<% } %>
 
-    <!-- Contenido principal -->
-    <main class="content">
-
-      <div class="container-fluid">
-
-        <!-- Título de la página -->
-        <div class="mb-4">
-          <h2>Gestión de Libros</h2>
-          <p class="text-muted">Consulta, agrega, edita o elimina libros de tu colección fácilmente.</p>
+<div class="flex dark:bg-gray-950">
+  <aside id="dashboardSidebar"
+        class="hidden md:flex flex-col min-h-screen w-56 transition-all duration-300 bg-gradient-to-b from-gray-900 via-gray-950 to-gray-900 text-white shadow-lg pt-14">
+        <div class="flex items-center gap-2 px-6 py-6 border-b border-indigo-700 justify-between">
+            <span class="flex items-center gap-2">
+                <i class="bi bi-list"></i>
+                <span id="sidebarTitle" class="font-bold text-lg tracking-wide">Menu</span>
+            </span>
+            <button id="sidebarCollapseBtn" class="text-indigo-200 hover:text-white focus:outline-none"
+                title="Colapsar menú">
+                <i class="bi bi-chevron-left"></i>
+            </button>
         </div>
-
-        <!-- Mensajes Flash -->
-        <% if (messages.success) { %>
-          <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <%- messages.success %>
-              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-          </div>
-          <% } %>
-
-            <% if (messages.error) { %>
-              <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                <%- messages.error %>
-                  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button>
-              </div>
-              <% } %>
-
-                <!-- Tarjeta de libros -->
-                <div class="card shadow-sm">
-                  <div class="card-header d-flex justify-content-between align-items-center">
-                    <h5 class="mb-0">Lista de Libros</h5>
-                    <a class="btn btn-sm btn-primary" href="/dashboard/books/add">
-                      <i class="bi bi-plus-circle"></i> Agregar
+        <nav class="flex-1 px-4 py-6">
+            <ul class="space-y-2">
+                <li>
+                    <a href="/dashboard"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-800 transition font-medium">
+                        <i class="bi bi-house"></i> <span class="sidebar-label">Inicio</span>
                     </a>
-                  </div>
-                  <div class="card-body">
-                    <% if (data.length) { %>
-                      <!-- table-responsive -->
-                      <div class="table-responsive">
-                        <table class="table table-striped table-hover align-middle text-center">
-                          <thead class="table-dark">
-                            <tr>
-                              <th>#</th>
-                              <th>Título</th>
-                              <th class="d-none d-sm-table-cell">Autor</th>
-                              <th class="d-none d-md-table-cell">Categoría</th>
-                              <th class="d-none d-lg-table-cell">Editorial</th>
-                              <th class="d-none d-lg-table-cell">Año</th>
-                              <th class="d-none d-xl-table-cell">Páginas</th>
-                              <th>Portada</th> <!-- Nueva columna -->
-                              <th>Acciones</th>
-                            </tr>
-                          </thead>
+                </li>
+                <li>
+                    <a href="/dashboard/books"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-purple-800 transition font-medium">
+                        <i class="bi bi-book-fill"></i> <span class="sidebar-label">Libros</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/dashboard/authors"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-blue-800 transition font-medium">
+                        <i class="bi bi-person-lines-fill"></i> <span class="sidebar-label">Autores</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/dashboard/publishers"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-indigo-700 transition font-medium">
+                        <i class="bi bi-building"></i> <span class="sidebar-label">Editoriales</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/dashboard/categories"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-purple-700 transition font-medium">
+                        <i class="bi bi-tags-fill"></i> <span class="sidebar-label">Categorías</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
 
-                          <tbody>
-                            <% data.forEach((book, i)=> { %>
-                              <tr>
-                                <th scope="row">
-                                  <%= i + 1 %>
-                                </th>
-                                <td>
-                                  <%= book.name %>
-                                </td>
-                                <td class="d-none d-sm-table-cell">
-                                  <%= book.author %>
-                                </td>
-                                <td class="d-none d-md-table-cell">
-                                  <%= book.category %>
-                                </td>
-                                <td class="d-none d-lg-table-cell">
-                                  <%= book.publisher %>
-                                </td>
-                                <td class="d-none d-lg-table-cell">
-                                  <%= book.year_published || '-' %>
-                                </td>
-                                <td class="d-none d-xl-table-cell">
-                                  <%= book.num_pages || '-' %>
-                                </td>
-
-                                <!-- Botón para abrir modal con la portada -->
-                                <td>
-                                  <% if (book.cover_image) { %>
-                                    <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal"
-                                      data-bs-target="#coverModal" data-image="/uploads/covers/<%= book.cover_image %>"
-                                      data-title="<%= book.name %>">
-                                      Ver portada
-                                    </button>
-                                    <% } else { %>
-                                      <span class="text-muted">Sin portada</span>
-                                      <% } %>
-                                </td>
-
-                                <td class="text-nowrap">
-                                  <div class="d-flex flex-column flex-sm-row justify-content-center gap-1">
-                                    <a class="btn btn-sm btn-success" href="/dashboard/books/edit/<%= book.id %>"><i
-                                        class="bi bi-pencil"></i></a>
-                                    <a class="btn btn-sm btn-danger" href="/dashboard/books/delete/<%= book.id %>"
-                                      onclick="return confirm('¿Estás seguro de que deseas eliminar este libro?')"><i
-                                        class="bi bi-trash"></i></a>
-                                  </div>
-                                </td>
-                              </tr>
-                              <% }) %>
-                          </tbody>
-
-                        </table>
-                      </div>
-                      <!-- table-responsive fin -->
-                      <% } else { %>
-                        <p class="text-center text-muted mb-0">No se encontraron libros.</p>
-                        <% } %>
-                  </div>
-                  <% if (totalPages> 1) {
-                    const maxPagesToShow = 5;
-                    let startPage = Math.max(currentPage - Math.floor(maxPagesToShow / 2), 1);
-                    let endPage = startPage + maxPagesToShow - 1;
-
-                    if (endPage > totalPages) {
-                    endPage = totalPages;
-                    startPage = Math.max(endPage - maxPagesToShow + 1, 1);
-                    }
-                    %>
-
-                    <nav aria-label="Paginación" class="mt-4">
-                      <ul class="pagination justify-content-center">
-
-                        <!-- Primera página -->
-                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                          <a class="page-link" href="/dashboard/books?page=1">«</a>
-                        </li>
-
-                        <!-- Página anterior -->
-                        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-                          <a class="page-link" href="/dashboard/books?page=<%= currentPage - 1 %>">‹</a>
-                        </li>
-
-                        <!-- Páginas -->
-                        <% for (let i=startPage; i <=endPage; i++) { %>
-                          <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-                            <a class="page-link" href="/dashboard/books?page=<%= i %>">
-                              <%= i %>
-                            </a>
-                          </li>
-                          <% } %>
-
-                            <!-- Página siguiente -->
-                            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-                              <a class="page-link" href="/dashboard/books?page=<%= currentPage + 1 %>">›</a>
-                            </li>
-
-                            <!-- Última página -->
-                            <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
-                              <a class="page-link" href="/dashboard/books?page=<%= totalPages %>">»</a>
-                            </li>
-                      </ul>
-                    </nav>
-
-                    <% } %>
-
-                </div>
-
-      </div>
-    </main>
-
-    </div>
-
-    <!-- Modal para mostrar la portada -->
-    <div class="modal fade" id="coverModal" tabindex="-1" aria-labelledby="coverModalLabel" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="coverModalLabel">Portada del Libro</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
-          </div>
-          <div class="modal-body text-center">
-            <img id="coverImage" src="" alt="Portada del libro" class="img-fluid rounded" style="max-height: 500px;">
-          </div>
+    <div id="dashboard-content" class="pt-20 flex-1 min-h-[calc(100vh-56px)] p-6 bg-gray-950 dark:bg-gray-950 transition-all duration-300">
+        <!-- Texto informativo -->
+        <div class="mb-4">
+            <h1 class="text-2xl font-bold text-indigo-400 mb-1 flex items-center gap-2"><i class="bi bi-book-half"></i> Gestión de Libros</h1>
+            <p class="text-gray-300">Aquí puedes buscar, filtrar, añadir, editar o eliminar libros del sistema. Usa los filtros para encontrar libros por nombre, ISBN, autor, categoría o estado.</p>
         </div>
-      </div>
+        <!-- Barra superior: Buscador, filtros y botón añadir -->
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6 w-full">
+            <div class="flex flex-1 flex-wrap gap-2 items-center bg-gray-900 rounded-lg px-4 py-3 shadow-inner min-w-0">
+                <div class="relative flex-1 min-w-[220px]">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="bi bi-search"></i>
+                    </span>
+                    <input 
+                        type="text" 
+                        placeholder="Buscar por nombre, ISBN, autor..." 
+                        class="pl-10 pr-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition w-full"
+                    />
+                </div>
+                <div class="relative min-w-[160px]">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="bi bi-tags"></i>
+                    </span>
+                    <select class="pl-9 pr-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition w-full">
+                        <option value="">Categoría</option>
+                        <option>Ficción</option>
+                        <option>Ciencia</option>
+                        <option>Historia</option>
+                    </select>
+                </div>
+                <div class="relative min-w-[140px]">
+                    <span class="absolute inset-y-0 left-0 flex items-center pl-3 text-gray-400">
+                        <i class="bi bi-toggle-on"></i>
+                    </span>
+                    <select class="pl-9 pr-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition w-full">
+                        <option value="">Estado</option>
+                        <option>Activo</option>
+                        <option>Inactivo</option>
+                    </select>
+                </div>
+                <button class="ml-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-4 py-2 rounded flex items-center gap-2 transition whitespace-nowrap" style="min-width: 0;">
+                    <i class="bi bi-search"></i> Buscar
+                </button>
+            </div>
+            <div class="flex-shrink-0 flex flex-col gap-2 justify-end w-full md:w-auto">
+                <a href="/dashboard/books/deleted" class="bg-gray-700 hover:bg-gray-800 text-white font-semibold px-5 py-2 rounded flex items-center gap-2 transition md:w-auto w-full whitespace-nowrap text-center" style="min-width: 0;">
+                    <i class="bi bi-archive"></i> Libros eliminados
+                </a>
+                <button class="bg-indigo-600 hover:bg-indigo-700 text-white font-semibold px-5 py-2 rounded flex items-center gap-2 transition md:w-auto w-full whitespace-nowrap" style="min-width: 0;" onclick="openBookModal()">
+                    <i class="bi bi-plus-circle"></i> Añadir libro
+                </button>
+            </div>
+        </div>
+        <!-- Tabla de libros -->
+        <div class="overflow-x-auto rounded-lg shadow-lg bg-gray-800">
+            <table class="min-w-full divide-y divide-gray-700">
+                <thead class="bg-gray-900">
+                    <tr>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Portada</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Nombre</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">ISBN</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Autor</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Año</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Páginas</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Editorial</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Cantidad</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Creado</th>
+                        <th class="px-4 py-3 text-left text-xs font-semibold text-gray-300 uppercase">Estado</th>
+                        <th class="px-4 py-3 text-center text-xs font-semibold text-gray-300 uppercase">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-700">
+                    <% if (books && books.length) { %>
+                        <% books.forEach(function(libro) { %>
+                        <tr>
+                            <td class="px-4 py-2"><img src="<%= libro.cover_image ? libro.cover_image : '/uploads/covers/no_cover_available.png' %>" alt="Portada" class="w-10 h-14 object-cover rounded shadow"></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.name %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.isbn || '-' %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.authors || '-' %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.year_published || '-' %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.num_pages || '-' %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.publisher || '-' %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.total_quantity ?? '-' %></td>
+                            <td class="px-4 py-2 text-gray-100"><%= libro.created_at ? libro.created_at.toISOString().substring(0,10) : '-' %></td>
+                            <td class="px-4 py-2">
+                                <span class="px-2 py-1 rounded <%= libro.state ? 'bg-green-700' : 'bg-red-700' %> text-xs text-white"><%= libro.state ? 'Activo' : 'Inactivo' %></span>
+                            </td>
+                            <td class="px-4 py-2 text-center">
+                                <div class="flex gap-4 justify-center items-center">
+                                    <button class="text-blue-400 hover:text-blue-600" title="Ver detalle" style="font-size:1.5rem;"><i class="bi bi-eye"></i></button>
+                                    <button class="text-yellow-400 hover:text-yellow-600" title="Editar" data-libro='<%- JSON.stringify(libro) %>' onclick="handleEditClick(this)" style="font-size:1.5rem;"><i class="bi bi-pencil-square"></i></button>
+                                    <button class="text-red-400 hover:text-red-600" title="Eliminar" onclick="confirmDeleteBook('<%= libro.id_book %>')" style="font-size:1.5rem;"><i class="bi bi-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <% }) %>
+                    <% } else { %>
+                        <tr><td colspan="11" class="text-center text-gray-400 py-6">No hay libros registrados.</td></tr>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <!-- Paginación -->
+        <div class="flex justify-end mt-4 gap-2">
+            <button class="px-3 py-1 rounded bg-gray-700 text-gray-300 hover:bg-indigo-600">&laquo;</button>
+            <button class="px-3 py-1 rounded bg-indigo-600 text-white font-bold">1</button>
+            <button class="px-3 py-1 rounded bg-gray-700 text-gray-300 hover:bg-indigo-600">2</button>
+            <button class="px-3 py-1 rounded bg-gray-700 text-gray-300 hover:bg-indigo-600">3</button>
+            <button class="px-3 py-1 rounded bg-gray-700 text-gray-300 hover:bg-indigo-600">&raquo;</button>
+        </div>
+        <!-- Modal de formulario de libro (visual) -->
+        <div id="bookModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-gray-900 rounded-lg p-8 w-full max-w-lg relative">
+                <button class="absolute top-2 right-2 text-gray-400 hover:text-red-400 text-2xl" onclick="closeBookModal()">&times;</button>
+                <h2 class="text-xl font-bold text-indigo-300 mb-4" id="modalTitle">Añadir libro</h2>
+                <form action="/dashboard/books/add" method="POST">
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">Nombre</label>
+                        <input name="name" type="text" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none" required />
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">ISBN</label>
+                        <input name="isbn" type="text" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">Año</label>
+                        <input name="year_published" type="number" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">Páginas</label>
+                        <input name="num_pages" type="number" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">Cantidad</label>
+                        <input name="total_quantity" type="number" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">Editorial</label>
+                        <input name="publisher" type="text" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none" />
+                    </div>
+                    <div class="mb-3">
+                        <label class="block text-gray-200 mb-1">Estado</label>
+                        <select name="state" class="w-full px-3 py-2 rounded bg-gray-800 text-gray-100 focus:outline-none">
+                            <option>Activo</option>
+                            <option>Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="flex justify-end gap-2 mt-4">
+                        <button type="button" class="px-4 py-2 rounded bg-gray-700 text-gray-300 hover:bg-gray-600" onclick="closeBookModal()">Cancelar</button>
+                        <button type="submit" class="px-4 py-2 rounded bg-indigo-600 text-white hover:bg-indigo-700">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Modal de confirmación de eliminación (visual) -->
+        <div id="deleteModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-gray-900 rounded-lg p-8 w-full max-w-sm relative">
+                <button class="absolute top-2 right-2 text-gray-400 hover:text-red-400 text-2xl" onclick="closeDeleteModal()">&times;</button>
+                <h2 class="text-xl font-bold text-red-400 mb-4">¿Eliminar libro?</h2>
+                <p class="text-gray-200 mb-6">Esta acción no se puede deshacer.</p>
+                <form id="deleteForm" method="POST">
+                    <div class="flex justify-end gap-2">
+                        <button type="button" class="px-4 py-2 rounded bg-gray-700 text-gray-300 hover:bg-gray-600" onclick="closeDeleteModal()">Cancelar</button>
+                        <button type="button" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700" onclick="submitDelete()">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- Scripts para modales -->
+        <script>
+            let libroEdit = null;
+            function openBookModal(mode, libro = null) {
+                const modal = document.getElementById('bookModal');
+                document.getElementById('modalTitle').textContent = mode === 'edit' ? 'Editar libro' : 'Añadir libro';
+                modal.classList.remove('hidden');
+                const form = modal.querySelector('form');
+                if (mode === 'edit' && libro) {
+                    libroEdit = libro;
+                    form.action = `/dashboard/books/edit/${libro.id_book}`;
+                    form.name.value = libro.name;
+                    form.isbn.value = libro.isbn || '';
+                    form.year_published.value = libro.year_published || '';
+                    form.num_pages.value = libro.num_pages || '';
+                    form.total_quantity.value = libro.total_quantity || '';
+                    form.publisher.value = libro.publisher || '';
+                    form.state.value = libro.state ? 'Activo' : 'Inactivo';
+                } else {
+                    libroEdit = null;
+                    form.action = '/dashboard/books/add';
+                    form.reset();
+                }
+            }
+            function handleEditClick(btn) {
+                const libro = JSON.parse(btn.getAttribute('data-libro'));
+                openBookModal('edit', libro);
+            }
+            function closeBookModal() {
+                document.getElementById('bookModal').classList.add('hidden');
+            }
+            let libroDeleteId = null;
+            function confirmDeleteBook(id) {
+                libroDeleteId = id;
+                document.getElementById('deleteModal').classList.remove('hidden');
+            }
+            function closeDeleteModal() {
+                libroDeleteId = null;
+                document.getElementById('deleteModal').classList.add('hidden');
+            }
+            function submitDelete() {
+                if (libroDeleteId) {
+                    const form = document.getElementById('deleteForm');
+                    form.action = `/dashboard/books/delete/${libroDeleteId}`;
+                    form.submit();
+                }
+            }
+        </script>
     </div>
 
-    <%- include('../../template/dashboard/footer') %>
+</div>
+
+<%- include('../../template/dashboard/footer', { jsStyle: ['js/dashboard/navbar.js'] }) %>

@@ -1,7 +1,3 @@
--- Crear base de datos
-CREATE DATABASE IF NOT EXISTS db_library;
-USE db_library;
-
 -- Crear tabla de roles primero para evitar problemas de FK
 CREATE TABLE IF NOT EXISTS roles (
   id_role INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,10 +39,11 @@ CREATE TABLE IF NOT EXISTS user_profiles (
   user_id INT PRIMARY KEY,
   phone VARCHAR(20),
   address VARCHAR(255),
-  profile_picture VARCHAR(255) DEFAULT,
-  profile_cover VARCHAR(255) DEFAULT,
+  profile_picture VARCHAR(255),
+  profile_cover VARCHAR(255),
   membership_type ENUM('basic', 'premium') DEFAULT 'basic',
   points INT DEFAULT 0,
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -58,6 +55,7 @@ CREATE TABLE IF NOT EXISTS admin_profiles (
   profile_picture VARCHAR(255),
   profile_cover VARCHAR(255),
   admin_level ENUM('super', 'moderator') DEFAULT 'moderator',
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -70,6 +68,7 @@ CREATE TABLE IF NOT EXISTS librarian_profiles (
   profile_cover VARCHAR(255),
   work_shift ENUM('morning', 'afternoon', 'night'),
   hire_date DATE,
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -82,5 +81,6 @@ CREATE TABLE IF NOT EXISTS author_profiles (
   profile_cover VARCHAR(255),
   biography TEXT,
   website VARCHAR(255),
+  about VARCHAR(500) NULL,
   FOREIGN KEY (user_id) REFERENCES users(id_user) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

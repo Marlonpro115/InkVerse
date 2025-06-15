@@ -1,73 +1,78 @@
 <!-- Footer -->
-<footer class="bg-dark text-white pt-5 pb-4 mt-auto">
-    <div class="container">
-        <div class="row text-center text-md-start">
-            <div class="col-md-4 mb-4">
-                <h5 class="fw-bold">Gestor de Libros</h5>
-                <p class="text-white small">
+<footer class="bg-gray-900 text-white pt-10 pb-6 mt-auto">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center md:text-left">
+
+            <!-- Info -->
+            <div>
+                <h5 class="text-xl font-bold mb-4">Gestor de Libros</h5>
+                <p class="text-gray-300 mb-4">
                     Una plataforma para organizar, buscar y disfrutar tus libros favoritos.
                 </p>
-                <p class="mb-1">
+                <p class="text-gray-400 mb-1 text-sm">
                     &copy; <%= new Date().getFullYear() %> Todos los derechos reservados.
                 </p>
-                <small class=" text-white">
-                    Desarrollado por <span class="text-white fw-semibold">Marlon & ASURA STUDIO'S</span>
+                <small class="text-gray-400 text-xs">
+                    Desarrollado por <span class="font-semibold text-white">Marlon & ASURA STUDIO'S</span>
                 </small>
             </div>
-            <div class="col-md-4 mb-4">
-                <h6 class="fw-bold mb-3">Enlaces útiles</h6>
-                <ul class="list-unstyled">
-                    <li><a href="#" class="text-white text-decoration-none d-block mb-2 hover-link">Inicio</a></li>
-                    <li><a href="#" class="text-white text-decoration-none d-block mb-2 hover-link">Contacto</a></li>
-                    <li><a href="#" class="text-white text-decoration-none d-block mb-2 hover-link">Política de
+
+            <!-- Useful Links -->
+            <div>
+                <h6 class="text-lg font-semibold mb-4">Enlaces útiles</h6>
+                <ul class="space-y-2">
+                    <li><a href="#" class="text-gray-300 hover:text-blue-500 underline transition">Inicio</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-blue-500 underline transition">Contacto</a></li>
+                    <li><a href="#" class="text-gray-300 hover:text-blue-500 underline transition">Política de
                             privacidad</a></li>
-                    <li><a href="#" class="text-white text-decoration-none d-block hover-link">Términos y
+                    <li><a href="#" class="text-gray-300 hover:text-blue-500 underline transition">Términos y
                             condiciones</a></li>
                 </ul>
             </div>
-            <div class="col-md-4 mb-4">
-                <h6 class="fw-bold mb-3">Suscríbete</h6>
-                <form>
-                    <div class="input-group mb-3">
-                        <input type="email" class="form-control" placeholder="Tu correo electrónico" aria-label="Email">
-                        <button class="btn btn-primary" type="submit">Enviar</button>
-                    </div>
+
+            <!-- Subscribe -->
+            <div>
+                <h6 class="text-lg font-semibold mb-4">Suscríbete</h6>
+                <form class="flex flex-col sm:flex-row items-center gap-3 mb-4" novalidate>
+                    <input type="email" placeholder="Tu correo electrónico" aria-label="Correo electrónico"
+                        class="w-full sm:flex-1 px-4 py-2 rounded-lg border border-gray-700 bg-gray-800 text-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+                        required />
+                    <button type="submit"
+                        class="px-6 py-2 rounded-lg bg-blue-600 hover:bg-blue-700 text-white font-semibold transition">
+                        Enviar
+                    </button>
                 </form>
-                <div>
-                    <a href="#" class="text-white me-3 hover-icon" aria-label="Facebook"><i
-                            class="bi bi-facebook fs-5"></i></a>
-                    <a href="#" class="text-white me-3 hover-icon" aria-label="Twitter"><i
-                            class="bi bi-twitter-x fs-5"></i></a>
-                    <a href="#" class="text-white hover-icon" aria-label="GitHub"><i class="bi bi-github fs-5"></i></a>
+                <div class="flex justify-center md:justify-start gap-6 text-2xl text-gray-300">
+                    <a href="#" aria-label="Facebook" class="hover:text-blue-500 transition" target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-facebook"></i>
+                    </a>
+                    <a href="#" aria-label="Twitter" class="hover:text-blue-500 transition" target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-twitter"></i>
+                    </a>
+                    <a href="https://github.com/Marlonpro115/InkVerse" aria-label="GitHub" class="hover:text-blue-500 transition" target="_blank" rel="noopener noreferrer">
+                        <i class="bi bi-github"></i>
+                    </a>
                 </div>
             </div>
         </div>
-        <hr class=" border-white">
-        <div class="text-center small text-white">
+
+        <hr class="border-gray-700 my-8" />
+
+        <div class="text-center text-gray-400 text-sm">
             © <%= new Date().getFullYear() %> Gestor de Libros. Todos los derechos reservados.
         </div>
     </div>
 </footer>
 
-<style>
-    .hover-link:hover {
-        color: #0d6efd !important;
-        /* Bootstrap primary */
-        text-decoration: underline;
-    }
-
-    .hover-icon:hover {
-        color: #0d6efd !important;
-        opacity: 0.8;
-    }
-</style>
-
-
 <!-- Scripts -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.6/dist/js/bootstrap.bundle.min.js"
-    integrity="sha384-j1CDi7MgGQ12Z7Qab0qlWQ/Qqz24Gc6BM0thvEMVjHnfYGF0rmFCozFSxQBxwHKO"
-    crossorigin="anonymous"></script>
-    <script src="../js/main.js"></script>
+<% if (Array.isArray(jsStyle)) { %>
+  <% jsStyle.forEach(function(js) { %>
+    <script src="/<%= js %>"></script>
+  <% }) %>
+<% } else if (jsStyle) { %>
+  <script src="/<%= jsStyle %>"></script>
+<% } %>
+
 </body>
 
 </html>

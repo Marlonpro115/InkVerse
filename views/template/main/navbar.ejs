@@ -67,6 +67,11 @@
                             <a href="/settings" class="flex px-4 py-2 text-indigo-800 hover:bg-indigo-100 transition items-center gap-2">
                                 <i class="bi bi-gear"></i> Configuración
                             </a>
+                            <% if (user.role === 'admin') { %>
+                                <a href="/dashboard" class="flex px-4 py-2 text-indigo-800 hover:bg-indigo-100 transition items-center gap-2">
+                                    <i class="bi bi-speedometer2"></i> Dashboard
+                                </a>
+                            <% } %>
                             <a href="/auth/logout" class="flex px-4 py-2 text-red-600 hover:bg-red-100 transition items-center gap-2">
                                 <i class="bi bi-box-arrow-right"></i> Cerrar sesión
                             </a>
@@ -104,6 +109,11 @@
                     <a href="/settings" class="flex px-4 py-2 text-indigo-800 hover:bg-indigo-100 transition items-center gap-2">
                         <i class="bi bi-gear"></i> Configuración
                     </a>
+                    <% if (user.role === 'admin') { %>
+                        <a href="/dashboard" class="flex px-4 py-2 text-indigo-800 hover:bg-indigo-100 transition items-center gap-2">
+                            <i class="bi bi-speedometer2"></i> Dashboard
+                        </a>
+                    <% } %>
                     <a href="/auth/logout" class="flex px-4 py-2 text-red-600 hover:bg-red-100 transition items-center gap-2">
                         <i class="bi bi-box-arrow-right"></i> Cerrar sesión
                     </a>
